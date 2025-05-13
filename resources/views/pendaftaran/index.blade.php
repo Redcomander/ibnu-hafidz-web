@@ -49,10 +49,17 @@
                         <select name="status" onchange="this.form.submit()"
                             class="text-sm border-2 border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-all duration-200 appearance-none pr-8 relative">
                             <option value="all" {{ request('status') == 'all' || !request('status') ? 'selected' : '' }}>Semua Status</option>
-                            <option value="Formulir" {{ request('status') == 'Formulir' ? 'selected' : '' }}>Formulir</option>
-                            <option value="Verifikasi" {{ request('status') == 'Verifikasi' ? 'selected' : '' }}>Verifikasi</option>
-                            <option value="Pembayaran" {{ request('status') == 'Pembayaran' ? 'selected' : '' }}>Pembayaran</option>
-                            <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                            <option value="formulir" {{ request('status') == 'formulir' ? 'selected' : '' }}>Formulir</option>
+                            <option value="checking" {{ request('status') == 'checking' ? 'selected' : '' }}>Checking Data</option>
+                            <option value="pembayaran" {{ request('status') == 'pembayaran' ? 'selected' : '' }}>Pembayaran</option>
+                            <option value="berhasil" {{ request('status') == 'berhasil' ? 'selected' : '' }}>Berhasil</option>
+                        </select>
+
+                        <select name="payment_type" onchange="this.form.submit()"
+                            class="text-sm border-2 border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-all duration-200 appearance-none pr-8 relative">
+                            <option value="all" {{ request('payment_type') == 'all' || !request('payment_type') ? 'selected' : '' }}>Semua Pembayaran</option>
+                            <option value="Lunas" {{ request('payment_type') == 'Lunas' ? 'selected' : '' }}>Lunas</option>
+                            <option value="Cicilan" {{ request('payment_type') == 'Cicilan' ? 'selected' : '' }}>Cicilan</option>
                         </select>
                     </form>
 
@@ -125,7 +132,7 @@
                             </div>
                             <div class="ml-3">
                                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Formulir</h3>
-                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'Formulir')->count() }}</p>
+                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'formulir')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -145,14 +152,14 @@
                             </div>
                             <div class="ml-3">
                                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Pembayaran</h3>
-                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'Pembayaran')->count() }}</p>
+                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'pembayaran')->count() }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Selesai Card -->
+            <!-- Berhasil Card -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-md stats-card">
                 <div class="relative">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
@@ -164,8 +171,51 @@
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Selesai</h3>
-                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'Selesai')->count() }}</p>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Berhasil</h3>
+                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('status', 'berhasil')->count() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Type Stats Cards -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Lunas Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-md stats-card">
+                <div class="relative">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-600"></div>
+                    <div class="p-3 sm:p-4">
+                        <div class="flex items-center">
+                            <div class="bg-gradient-to-br from-green-500 to-green-600 p-2 rounded-lg shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Pembayaran Lunas</h3>
+                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('payment_type', 'Lunas')->count() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cicilan Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-md stats-card">
+                <div class="relative">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-orange-600"></div>
+                    <div class="p-3 sm:p-4">
+                        <div class="flex items-center">
+                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-2 rounded-lg shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-medium">Pembayaran Cicilan</h3>
+                                <p class="text-xl font-bold text-gray-800 dark:text-white">{{ App\Models\CalonSantri::where('payment_type', 'Cicilan')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -213,17 +263,24 @@
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">No. Pendaftaran</th>
                                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama</th>
                                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Info Pribadi</th>
                                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell">Orang Tua</th>
                                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Kontak</th>
                                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pembayaran</th>
                                 <th scope="col" class="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach ($calonsantri as $calon)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $calon->registration_number ?? 'REG-' . str_pad($calon->id, 5, '0', STR_PAD_LEFT) }}
+                                        </div>
+                                    </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm">
@@ -274,21 +331,21 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap">
-                                        @if($calon->status == 'Formulir')
+                                        @if($calon->status == 'formulir')
                                             <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800/50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                 </svg>
                                                 Formulir
                                             </span>
-                                        @elseif($calon->status == 'Verifikasi')
+                                        @elseif($calon->status == 'checking')
                                             <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-800/50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                                 </svg>
-                                                Verifikasi
+                                                Checking Data
                                             </span>
-                                        @elseif($calon->status == 'Pembayaran')
+                                        @elseif($calon->status == 'pembayaran')
                                             <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800/50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -300,7 +357,31 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                                 </svg>
-                                                Selesai
+                                                Berhasil
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        @if($calon->payment_type == 'Lunas')
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800/50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4M9 8h6m-5 0a2 2 0 110 4h5a2 2 0 100-4" />
+                                                </svg>
+                                                Lunas
+                                            </span>
+                                        @elseif($calon->payment_type == 'Cicilan')
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200 border border-orange-200 dark:border-orange-800/50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Cicilan
+                                            </span>
+                                        @else
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-800/50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Belum Ada
                                             </span>
                                         @endif
                                     </td>
@@ -313,12 +394,12 @@
                                                 </svg>
                                             </a>
 
-                                            @if($calon->status == 'Formulir')
-                                                <form action="{{ route('pendaftaran.storeVerifikasi') }}" method="POST" class="inline">
+                                            @if($calon->status == 'formulir')
+                                                <form action="{{ route('pendaftaran.checking') }}" method="POST" class="inline">
                                                     @csrf
                                                     <input type="hidden" name="calon_santri_id" value="{{ $calon->id }}">
                                                     <input type="hidden" name="admin_action" value="1">
-                                                    <button type="submit" class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 p-1 rounded-md transition-colors duration-200" title="Verifikasi">
+                                                    <button type="submit" class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 p-1 rounded-md transition-colors duration-200" title="Checking Data">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                                         </svg>
@@ -326,27 +407,15 @@
                                                 </form>
                                             @endif
 
-                                            @if($calon->status == 'Verifikasi')
-                                                <form action="{{ route('pendaftaran.storePembayaran') }}" method="POST" class="inline">
+                                            @if($calon->status == 'checking')
+                                                <form action="{{ route('pendaftaran.pembayaran') }}" method="POST" class="inline">
                                                     @csrf
                                                     <input type="hidden" name="calon_santri_id" value="{{ $calon->id }}">
+                                                    <input type="hidden" name="payment_type" value="Lunas">
                                                     <input type="hidden" name="admin_action" value="1">
                                                     <button type="submit" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 p-1 rounded-md transition-colors duration-200" title="Pembayaran">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            @endif
-
-                                            @if($calon->status == 'Pembayaran')
-                                                <form action="{{ route('pendaftaran.selesai', $calon->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="admin_action" value="1">
-                                                    <button type="submit" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50 p-1 rounded-md transition-colors duration-200" title="Selesai">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                                         </svg>
                                                     </button>
                                                 </form>
@@ -448,40 +517,40 @@ document.addEventListener('DOMContentLoaded', function() {
         const weekData = {
             labels: ['7 hari', '6 hari', '5 hari', '4 hari', '3 hari', '2 hari', 'Hari ini'],
             formulir: [
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(6))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(5))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(4))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(3))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(2))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now()->subDays(1))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereDate('created_at', now())->count() }}
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(6))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(5))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(4))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(3))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(2))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now()->subDays(1))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereDate('created_at', now())->count() }}
             ],
-            verifikasi: [
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(6))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(5))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(4))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(3))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(2))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now()->subDays(1))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereDate('created_at', now())->count() }}
+            checking: [
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(6))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(5))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(4))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(3))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(2))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now()->subDays(1))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereDate('created_at', now())->count() }}
             ],
             pembayaran: [
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(6))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(5))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(4))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(3))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(2))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now()->subDays(1))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereDate('created_at', now())->count() }}
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(6))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(5))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(4))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(3))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(2))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now()->subDays(1))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereDate('created_at', now())->count() }}
             ],
-            selesai: [
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(6))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(5))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(4))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(3))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(2))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now()->subDays(1))->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereDate('created_at', now())->count() }}
+            berhasil: [
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(6))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(5))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(4))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(3))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(2))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now()->subDays(1))->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereDate('created_at', now())->count() }}
             ]
         };
 
@@ -489,32 +558,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthData = {
             labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu ini'],
             formulir: [
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
             ],
-            verifikasi: [
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
+            checking: [
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
             ],
             pembayaran: [
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
             ],
-            selesai: [
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
+            berhasil: [
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereBetween('created_at', [now()->startOfMonth(), now()->startOfMonth()->addDays(6)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereBetween('created_at', [now()->startOfMonth()->addDays(7), now()->startOfMonth()->addDays(13)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereBetween('created_at', [now()->startOfMonth()->addDays(14), now()->startOfMonth()->addDays(20)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereBetween('created_at', [now()->startOfMonth()->addDays(21), now()->startOfMonth()->addDays(27)])->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereBetween('created_at', [now()->startOfMonth()->addDays(28), now()->endOfMonth()])->count() }}
             ]
         };
 
@@ -522,60 +591,60 @@ document.addEventListener('DOMContentLoaded', function() {
         const yearData = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
             formulir: [
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Formulir')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'formulir')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
             ],
-            verifikasi: [
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '11')->whereYear('created_at',  'Verifikasi')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Verifikasi')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
+            checking: [
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'checking')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
             ],
             pembayaran: [
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Pembayaran')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'pembayaran')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
             ],
-            selesai: [
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
-                {{ App\Models\CalonSantri::where('status', 'Selesai')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
+            berhasil: [
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '01')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '02')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '03')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '04')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '05')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '06')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '07')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '08')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '09')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '10')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '11')->whereYear('created_at', now()->year)->count() }},
+                {{ App\Models\CalonSantri::where('status', 'berhasil')->whereMonth('created_at', '12')->whereYear('created_at', now()->year)->count() }}
             ]
         };
 
@@ -617,16 +686,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: currentData.formulir
             },
             {
-                name: 'Verifikasi',
-                data: currentData.verifikasi
+                name: 'Checking Data',
+                data: currentData.checking
             },
             {
                 name: 'Pembayaran',
                 data: currentData.pembayaran
             },
             {
-                name: 'Selesai',
-                data: currentData.selesai
+                name: 'Berhasil',
+                data: currentData.berhasil
             }
         ],
         xaxis: {
@@ -758,16 +827,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: newData.formulir
             },
             {
-                name: 'Verifikasi',
-                data: newData.verifikasi
+                name: 'Checking Data',
+                data: newData.checking
             },
             {
                 name: 'Pembayaran',
                 data: newData.pembayaran
             },
             {
-                name: 'Selesai',
-                data: newData.selesai
+                name: 'Berhasil',
+                data: newData.berhasil
             }
         ]);
     }
@@ -833,3 +902,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
+
+<Actions>
+  <Action name="Add export to Excel functionality" description="Add a button to export registration data to Excel/CSV" />
+  <Action name="Implement batch processing" description="Add functionality to process multiple registrations at once" />
+  <Action name="Create detailed payment reports" description="Add a page to view payment statistics and reports" />
+  <Action name="Add registration certificate generator" description="Create a feature to generate and print registration certificates" />
+  <Action name="Implement email notifications" description="Add automatic email notifications for status changes" />
+</Actions>
+

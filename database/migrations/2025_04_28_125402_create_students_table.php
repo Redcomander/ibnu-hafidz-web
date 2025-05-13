@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->string('tempat_lahir')->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->string('no_akte')->nullable();
-            $table->string('agama')->nullable();
+            $table->string('agama')->default('Islam')->nullable();
             $table->string('kewarganegaraan')->nullable();
             $table->string('rt')->nullable();
             $table->string('rw')->nullable();
@@ -46,8 +46,6 @@ return new class extends Migration {
             $table->year('tahun_lulus_ibu')->nullable();
             $table->string('pekerjaan_ibu')->nullable();
             $table->string('no_hp_telpon')->nullable();
-            $table->string('rombel_ads')->nullable();
-            $table->string('rombel_kelas')->nullable();
             $table->string('sekolah_asal')->nullable();
             $table->year('tahun_kelulusan')->nullable();
             $table->string('no_peserta_un')->nullable();
@@ -71,7 +69,6 @@ return new class extends Migration {
             $table->string('email')->nullable();
             $table->string('jenis_pendaftaran')->nullable();
             $table->text('ket')->nullable();
-            $table->string('kelas_lama')->nullable();
             $table->string('anbk')->nullable();
         });
     }

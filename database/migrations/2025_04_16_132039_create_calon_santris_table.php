@@ -22,7 +22,14 @@ return new class extends Migration {
             $table->string('asal_sekolah');
             $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
 
-            $table->enum('status', ['Formulir', 'Verifikasi', 'Pembayaran', 'Selesai'])->default('Formulir');
+            // Updated status enum with new values for the new flow
+            $table->enum('status', ['formulir', 'checking', 'pembayaran', 'berhasil'])->default('formulir');
+
+            // New fields for the updated registration flow
+            $table->enum('payment_type', ['Lunas', 'Cicilan'])->nullable();
+            $table->string('nomor_pendaftaran')->nullable();
+
+            // Keeping these fields for backward compatibility and admin functionality
             $table->unsignedBigInteger('verified_by_id')->nullable(); // internal reference (optional)
             $table->string('verified_by_name')->nullable();           // keeps name even if user is deleted
             $table->string('payment_proof')->nullable();

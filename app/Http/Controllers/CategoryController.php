@@ -11,12 +11,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        return view('category.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('category.create');
     }
 
     public function store(Request $request)
@@ -29,12 +29,12 @@ class CategoryController extends Controller
 
         Category::create($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Category created.');
+        return redirect()->route('articles.index')->with('success', 'Category created.');
     }
 
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('category.edit', compact('category'));
     }
 
     public function update(Request $request, Category $category)

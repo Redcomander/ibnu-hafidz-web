@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\NewsletterController;
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/pendaftaran/{id}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
     Route::delete('/admin/pendaftaran/{id}', [PendaftaranController::class, 'destroy'])->name('pendaftaran.destroy');
     Route::get('/admin/pendaftaran/{id}/payment-proof', [PendaftaranController::class, 'viewPaymentProof'])->name('pendaftaran.viewPaymentProof');
+    // New route for verifying installment payments
+    Route::get('/admin/pendaftaran/{id}/installments', [PendaftaranController::class, 'viewInstallments'])->name('pendaftaran.viewInstallments');
+    Route::post('/admin/pendaftaran/verify-installment/{installmentId}', [PendaftaranController::class, 'verifyInstallment'])->name('pendaftaran.verifyInstallment');
 });
 
 Route::get('/profil', function () {
@@ -40,24 +44,25 @@ Route::get('/profil', function () {
 
 //Student Route
 // Resource routes for standard CRUD operations
-Route::resource('/admin/student', StudentController::class)->middleware('auth');
-// Additional custom routes for the StudentController
-Route::get('/admin/student/export', [StudentController::class, 'export'])->name('student.export')->middleware('auth');
-Route::post('/admin/student/import', [StudentController::class, 'import'])->name('student.import')->middleware('auth');
-Route::get('/admin/student/import/form', function () {
-    return view('students.import');
-})->name('student.import.form')->middleware('auth');
-Route::get('/admin/student/search', [StudentController::class, 'search'])->name('student.search')->middleware('auth');
-// Public routes for pendaftaran
+Route::resource('/admin/student', StudentController::class)->middleware('auth')->names('student');
+
+// Updated Student Export and Import routes
+Route::get('/admin/student-export', [StudentController::class, 'export'])->name('student.export')->middleware('auth');
+Route::get('/admin/student-import', [StudentController::class, 'importForm'])->name('student.import.form')->middleware('auth');
+Route::post('/admin/student-import', [StudentController::class, 'import'])->name('student.import')->middleware('auth');
+Route::get('/admin/student-template', [StudentController::class, 'template'])->name('student.template')->middleware('auth');
+Route::get('/admin/student-search', [StudentController::class, 'search'])->name('student.search')->middleware('auth');
+
+// Public routes for pendaftaran (updated for single-page flow)
 Route::get('/pendaftaran', [PendaftaranController::class, 'halamandepan'])->name('pendaftaran.halamandepan');
 Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
-Route::get('/pendaftaran/verifikasi', [PendaftaranController::class, 'verifikasi'])->name('pendaftaran.verifikasi');
-Route::post('/pendaftaran/verifikasi', [PendaftaranController::class, 'storeVerifikasi'])->name('pendaftaran.storeVerifikasi');
-Route::get('/pendaftaran/pembayaran', [PendaftaranController::class, 'pembayaran'])->name('pendaftaran.pembayaran');
-Route::post('/pendaftaran/pembayaran', [PendaftaranController::class, 'storePembayaran'])->name('pendaftaran.storePembayaran');
-Route::get('/pendaftaran/selesai', [PendaftaranController::class, 'selesai'])->name('pendaftaran.selesai');
-Route::put('/pendaftaran/selesai/{id}', [PendaftaranController::class, 'selesai'])->name('pendaftaran.selesai');
-
+Route::post('/pendaftaran/checking', [PendaftaranController::class, 'checking'])->name('pendaftaran.checking');
+Route::post('/pendaftaran/pembayaran', [PendaftaranController::class, 'pembayaran'])->name('pendaftaran.pembayaran');
+Route::get('/pendaftaran/berhasil', [PendaftaranController::class, 'berhasil'])->name('pendaftaran.berhasil');
+Route::get('/pendaftaran/{calonSantri}/download-payment-proof', [PendaftaranController::class, 'downloadPaymentProof'])->name('pendaftaran.downloadPaymentProof');
+Route::post('/pendaftaran/track', [PendaftaranController::class, 'trackPendaftaran'])->name('pendaftaran.track');
+Route::post('/pendaftaran/uploadInstallment/{calonSantri}', [PendaftaranController::class, 'uploadInstallment'])->name('pendaftaran.uploadInstallment');
+Route::post('/pendaftaran/upload-installment', [PendaftaranController::class, 'uploadInstallmentPublic'])->name('pendaftaran.uploadInstallmentPublic');
 
 //Gallery Route
 Route::get('/gallery/video', [GalleryController::class, 'galleryVideo'])->name('gallery.videos');
@@ -65,13 +70,25 @@ Route::get('/gallery/photo', [GalleryController::class, 'galleryPhoto'])->name('
 Route::delete('/dashboard/galeri/mass-destroy', [GalleryController::class, 'massDestroy'])->name('galeri.massDestroy');
 Route::resource('dashboard/galeri', GalleryController::class);
 
-
 //Article Route
 Route::resource('articles', ArticleController::class)->except(['show'])->middleware(['auth']);
 // Update the routes for the new structure
 Route::get('/articles/{category:slug}/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/all-article', [ArticleController::class, 'allArticles'])->name('all-articles');
 Route::get('/articles/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/analytics/article/{id}', [ArticleController::class, 'analytics'])
+    ->name('articles.analytics')
+    ->middleware('auth');
+
+// Category routes
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+});
 
 //User Route
 // Add these routes for real-time status updates

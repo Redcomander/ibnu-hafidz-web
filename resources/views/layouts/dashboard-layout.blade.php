@@ -605,7 +605,7 @@
                 <!-- Berita -->
                 <li>
                     <a href="{{ url('/articles') }}"
-                        class="sidebar-menu-item {{ request()->is('articles*') ? 'active' : '' }} flex items-center p-3">
+                        class="sidebar-menu-item {{ request()->is('articles*', 'admin/categories*') ? 'active' : '' }} flex items-center p-3">
                         <span class="sidebar-icon mr-3">
                             <i class="fas fa-newspaper text-lg"></i>
                         </span>
@@ -752,7 +752,7 @@
                         <!-- Berita -->
                         <li>
                             <a href="{{ url('/articles') }}"
-                                class="sidebar-menu-item {{ request()->is('articles*') ? 'active' : '' }} flex items-center p-3">
+                                class="sidebar-menu-item {{ request()->is('articles*', 'admin/categories*') ? 'active' : '' }} flex items-center p-3">
                                 <span class="sidebar-icon mr-3">
                                     <i class="fas fa-newspaper text-lg"></i>
                                 </span>

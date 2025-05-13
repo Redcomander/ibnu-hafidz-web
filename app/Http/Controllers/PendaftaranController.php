@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalonSantri;
+use App\Models\PaymentInstallment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PendaftaranController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource for admin.
      */
     public function index(Request $request)
     {
@@ -23,7 +26,8 @@ class PendaftaranController extends Controller
                     ->orWhere('no_whatsapp', 'like', "%{$searchTerm}%")
                     ->orWhere('asal_sekolah', 'like', "%{$searchTerm}%")
                     ->orWhere('nama_ayah', 'like', "%{$searchTerm}%")
-                    ->orWhere('nama_ibu', 'like', "%{$searchTerm}%");
+                    ->orWhere('nama_ibu', 'like', "%{$searchTerm}%")
+                    ->orWhere('nomor_pendaftaran', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -32,19 +36,27 @@ class PendaftaranController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Handle payment type filter
+        if ($request->has('payment_type') && $request->payment_type != 'all') {
+            $query->where('payment_type', $request->payment_type);
+        }
+
         // Paginate the results
         $calonsantri = $query->latest()->paginate(10);
 
         return view('pendaftaran.index', compact('calonsantri'));
     }
 
+    /**
+     * Display the front-end registration page
+     */
     public function halamandepan()
     {
         return view('pendaftarandepan');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource in admin panel.
      */
     public function create()
     {
@@ -53,162 +65,200 @@ class PendaftaranController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * This handles both admin creation and front-end form submission (step 1)
+     */
+    /**
+     * Store a newly created resource in storage.
+     * This handles both admin creation and front-end form submission (step 1)
      */
     public function store(Request $request)
     {
-        // Validate the form data
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required|string',
-            'nama_ayah' => 'required|string|max:255',
-            'nama_ibu' => 'required|string|max:255',
-            'no_whatsapp' => 'required|string|max:15',
-            'asal_sekolah' => 'required|string|max:255',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-        ]);
+        try {
+            // Validate the form data
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required|string|max:255',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date',
+                'alamat' => 'required|string',
+                'nama_ayah' => 'required|string|max:255',
+                'nama_ibu' => 'required|string|max:255',
+                'no_whatsapp' => 'required|string|max:20',
+                'asal_sekolah' => 'required|string|max:255',
+                'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            ]);
 
-        // Create a new CalonSantri record (store personal info)
-        $calonSantri = CalonSantri::create([
-            'nama' => $validated['nama'],
-            'tempat_lahir' => $validated['tempat_lahir'],
-            'tanggal_lahir' => $validated['tanggal_lahir'],
-            'alamat' => $validated['alamat'],
-            'nama_ayah' => $validated['nama_ayah'],
-            'nama_ibu' => $validated['nama_ibu'],
-            'no_whatsapp' => $validated['no_whatsapp'],
-            'asal_sekolah' => $validated['asal_sekolah'],
-            'jenis_kelamin' => $validated['jenis_kelamin'],
-            'status' => 'Formulir', // Set the status to "Formulir" initially
-        ]);
+            if ($validator->fails()) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
-        // Store the calon santri ID in session to track progress
-        session(['calon_santri_id' => $calonSantri->id]);
+            // Create a new CalonSantri record
+            $calonSantri = CalonSantri::create([
+                'nama' => $request->nama,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'alamat' => $request->alamat,
+                'nama_ayah' => $request->nama_ayah,
+                'nama_ibu' => $request->nama_ibu,
+                'no_whatsapp' => $request->no_whatsapp,
+                'asal_sekolah' => $request->asal_sekolah,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'status' => 'formulir', // Set the status to "formulir" initially
+            ]);
 
-        // Check if this is an AJAX request
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json($calonSantri);
+            // Store the calon santri ID in session to track progress
+            session(['calon_santri_id' => $calonSantri->id]);
+
+            // Check if this is an AJAX request
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json($calonSantri);
+            }
+
+            // If created by admin, redirect to admin index
+            if ($request->has('admin_created')) {
+                return redirect()->route('pendaftaran.index')->with('success', 'Pendaftar baru berhasil ditambahkan.');
+            }
+
+            // For regular form submission, redirect to the next step
+            return redirect()->route('pendaftaran.checking');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error in store method: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            // Return a proper error response
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'], 500);
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')->withInput();
         }
-
-        if ($request->has('admin_created')) {
-            return redirect()->route('pendaftaran.index')->with('success', 'Pendaftar baru berhasil ditambahkan.');
-        }
-
-        return redirect()->route('pendaftaran.verifikasi'); // Redirect for non-AJAX requests
     }
 
-    public function verifikasi()
+    /**
+     * Process the checking data step (step 2)
+     */
+    public function checking(Request $request)
+    {
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'calon_santri_id' => 'required|exists:calon_santris,id',
+            ]);
+
+            if ($validator->fails()) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+                return redirect()->back()->withErrors($validator);
+            }
+
+            // Find the calon santri
+            $calonSantri = CalonSantri::findOrFail($request->calon_santri_id);
+
+            // Update status
+            $calonSantri->status = 'checking';
+            $calonSantri->save();
+
+            // Check if this is an AJAX request
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json($calonSantri);
+            }
+
+            // For regular form submission, redirect to the next step
+            return redirect()->route('pendaftaran.pembayaran');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error in checking method: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            // Return a proper error response
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat memproses data. Silakan coba lagi.'], 500);
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses data. Silakan coba lagi.');
+        }
+    }
+
+    /**
+     * Process the payment step (step 3)
+     */
+    public function pembayaran(Request $request)
+    {
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'calon_santri_id' => 'required|exists:calon_santris,id',
+                'payment_type' => 'required|in:Lunas,Cicilan',
+                'payment_proof' => $request->has('admin_action') ? 'sometimes|image|max:5120' : 'required|image|max:5120',
+            ]);
+
+            if ($validator->fails()) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+                return redirect()->back()->withErrors($validator);
+            }
+
+            // Find the calon santri
+            $calonSantri = CalonSantri::findOrFail($request->calon_santri_id);
+
+            // Handle file upload
+            if ($request->hasFile('payment_proof')) {
+                $file = $request->file('payment_proof');
+                $filename = time() . '_' . $calonSantri->id . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('payment_proofs', $filename, 'public');
+                $calonSantri->payment_proof = $path;
+            }
+
+            // Generate registration number if not exists
+            if (!$calonSantri->nomor_pendaftaran) {
+                $calonSantri->nomor_pendaftaran = $calonSantri->generateNomorPendaftaran();
+            }
+
+            // Update status and payment type
+            $calonSantri->status = 'berhasil';
+            $calonSantri->payment_type = $request->payment_type;
+            $calonSantri->save();
+
+            // Check if this is an AJAX request
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json($calonSantri);
+            }
+
+            // If admin action, redirect to admin index
+            if ($request->has('admin_action')) {
+                return redirect()->route('pendaftaran.index')->with('success', 'Status pendaftar berhasil diubah menjadi Berhasil.');
+            }
+
+            // For regular form submission, redirect to the success page
+            return redirect()->route('pendaftaran.berhasil')->with('calon_santri_id', $calonSantri->id);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error in pembayaran method: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            // Return a proper error response
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.'], 500);
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.');
+        }
+    }
+
+    /**
+     * Display the success page (step 4)
+     */
+    public function berhasil()
     {
         $calonSantriId = session('calon_santri_id');
         $calonSantri = CalonSantri::findOrFail($calonSantriId);
 
-        return view('pendaftaran.verifikasi', compact('calonSantri'));
-    }
-
-    /**
-     * Store the verification data (step 2).
-     * MODIFIED: Keep status as "Formulir" and don't update verified_by fields
-     */
-    public function storeVerifikasi(Request $request)
-    {
-        // Get calon santri ID from request or session
-        $calonSantriId = $request->input('calon_santri_id', session('calon_santri_id'));
-        $calonSantri = CalonSantri::findOrFail($calonSantriId);
-
-        // Status remains "Formulir" - no change to status here
-        // Removed the verified_by logic from here
-
-        // Check if this is an AJAX request
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json($calonSantri);
-        }
-
-        if ($request->has('admin_action')) {
-            return redirect()->route('pendaftaran.index')->with('success', 'Data pendaftar berhasil diverifikasi.');
-        }
-
-        return redirect()->route('pendaftaran.pembayaran'); // Redirect for non-AJAX requests
-    }
-
-    /**
-     * Show the payment form (step 3).
-     */
-    public function pembayaran()
-    {
-        $calonSantriId = session('calon_santri_id');
-        $calonSantri = CalonSantri::findOrFail($calonSantriId);
-
-        return view('pendaftaran.pembayaran', compact('calonSantri'));
-    }
-
-    /**
-     * Store the payment proof (step 3).
-     * MODIFIED: Change status to "Pembayaran" after payment proof is uploaded
-     */
-    public function storePembayaran(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'payment_proof' => $request->has('admin_action') ? 'sometimes|image|max:5120' : 'required|image|max:5120', // 5MB max
-            'calon_santri_id' => 'sometimes|exists:calon_santris,id'
-        ]);
-
-        // Get calon santri ID from request or session
-        $calonSantriId = $request->input('calon_santri_id', session('calon_santri_id'));
-        $calonSantri = CalonSantri::findOrFail($calonSantriId);
-
-        // Store payment proof
-        if ($request->hasFile('payment_proof')) {
-            $path = $request->file('payment_proof')->store('payment_proofs', 'public');
-            $calonSantri->payment_proof = $path;
-        }
-
-        // Update the status to "Pembayaran" and save
-        $calonSantri->status = 'Pembayaran';
-        $calonSantri->save();
-
-        // Check if this is an AJAX request
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json($calonSantri);
-        }
-
-        if ($request->has('admin_action')) {
-            return redirect()->route('pendaftaran.index')->with('success', 'Status pendaftar berhasil diubah menjadi Pembayaran.');
-        }
-
-        return redirect()->route('pendaftaran.selesai'); // Redirect for non-AJAX requests
-    }
-
-    /**
-     * Display the completion page (step 4).
-     * MODIFIED: Update status to "Selesai" and set verified_by fields when admin completes the registration
-     */
-    public function selesai(Request $request, $id = null)
-    {
-        if ($id) {
-            $calonSantri = CalonSantri::findOrFail($id);
-        } else {
-            $calonSantriId = session('calon_santri_id');
-            $calonSantri = CalonSantri::findOrFail($calonSantriId);
-        }
-
-        // Mark the registration as completed
-        $calonSantri->status = 'Selesai';
-
-        // Set verified_by fields only when an admin completes the registration
-        if (auth()->check() && $request->has('admin_action')) {
-            $calonSantri->verified_by_id = auth()->id();
-            $calonSantri->verified_by_name = auth()->user()->name;
-        }
-
-        $calonSantri->save();
-
-        if ($request->has('admin_action')) {
-            return redirect()->route('pendaftaran.index')->with('success', 'Status pendaftar berhasil diubah menjadi Selesai dan telah diverifikasi.');
-        }
-
-        return view('pendaftaran.selesai', compact('calonSantri'));
+        return view('pendaftaran.berhasil', compact('calonSantri'));
     }
 
     /**
@@ -244,13 +294,33 @@ class PendaftaranController extends Controller
             'alamat' => 'required|string',
             'nama_ayah' => 'required|string|max:255',
             'nama_ibu' => 'required|string|max:255',
-            'no_whatsapp' => 'required|string|max:15',
+            'no_whatsapp' => 'required|string|max:20',
             'asal_sekolah' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'status' => 'required|in:Formulir,Verifikasi,Pembayaran,Selesai',
+            'status' => 'required|in:formulir,checking,pembayaran,berhasil',
+            'payment_type' => 'nullable|in:Lunas,Cicilan',
         ]);
 
+        // Handle payment proof update if provided
+        if ($request->hasFile('payment_proof')) {
+            // Delete old file if exists
+            if ($calonSantri->payment_proof) {
+                Storage::disk('public')->delete($calonSantri->payment_proof);
+            }
+
+            $file = $request->file('payment_proof');
+            $filename = time() . '_' . $calonSantri->id . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('payment_proofs', $filename, 'public');
+            $calonSantri->payment_proof = $path;
+        }
+
+        // Generate registration number if not exists and status is berhasil
+        if (!$calonSantri->nomor_pendaftaran && $validated['status'] === 'berhasil') {
+            $calonSantri->nomor_pendaftaran = $this->generateNomorPendaftaran($calonSantri);
+        }
+
         $calonSantri->update($validated);
+        $calonSantri->save();
 
         return redirect()->route('pendaftaran.index')->with('success', 'Data pendaftar berhasil diperbarui.');
     }
@@ -284,5 +354,295 @@ class PendaftaranController extends Controller
         }
 
         return view('pendaftaran.payment-proof', compact('calonSantri'));
+    }
+
+    /**
+     * Generate a unique registration number
+     */
+    private function generateNomorPendaftaran($calonSantri)
+    {
+        $prefix = 'PSB-';
+        $year = date('Y');
+        $month = date('m');
+
+        // Get the count of registrations in the current month
+        $count = CalonSantri::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count() + 1;
+
+        // Format: PSB-YYYYMM-XXXX (XXXX is sequential number padded to 4 digits)
+        return $prefix . $year . $month . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function downloadPaymentProof(CalonSantri $calonSantri)
+    {
+        // Get the file path
+        $path = storage_path('app/public/' . $calonSantri->payment_proof);
+
+        // Check if file exists
+        if (!file_exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        // Generate a filename for the download
+        $filename = 'bukti_pembayaran_' . $calonSantri->registration_number . '.' . pathinfo($path, PATHINFO_EXTENSION);
+
+        // Return the file as a download
+        return response()->download($path, $filename);
+    }
+
+    /**
+     * Track registration status by registration number
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function trackPendaftaran(Request $request)
+    {
+        $request->validate([
+            'registration_number' => 'required|string',
+        ]);
+
+        $regNumber = $request->registration_number;
+
+        // Extract ID from registration number if it follows a pattern like REG-000015
+        $id = null;
+        if (preg_match('/REG-(\d+)/', $regNumber, $matches)) {
+            $id = (int) $matches[1];
+        }
+
+        // Find the calon santri by ID instead of registration_number
+        $calonSantri = CalonSantri::where('id', $id)->first();
+
+        if (!$calonSantri) {
+            return response()->json(['error' => 'Nomor pendaftaran tidak ditemukan.'], 404);
+        }
+
+        // Format the registration number for display
+        $formattedRegNumber = 'REG-' . str_pad($calonSantri->id, 6, '0', STR_PAD_LEFT);
+
+        // Get payment history if applicable
+        $paymentHistory = [];
+        if ($calonSantri->payment_type == 'Cicilan') {
+            $paymentHistory = PaymentInstallment::where('calon_santri_id', $calonSantri->id)
+                ->orderBy('installment_number', 'asc')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'installment_number' => $item->installment_number,
+                        'payment_date' => date('d-m-Y', strtotime($item->payment_date)),
+                        'amount' => number_format($item->amount, 0, ',', '.'),
+                        'status' => $item->status
+                    ];
+                });
+        }
+
+        // Calculate total paid and remaining amount for cicilan
+        $totalPaid = 0;
+        $remainingAmount = 9600000; // Total biaya administrasi
+
+        if ($calonSantri->payment_type == 'Cicilan') {
+            $totalPaid = PaymentInstallment::where('calon_santri_id', $calonSantri->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+            $remainingAmount = max(0, $remainingAmount - $totalPaid);
+        } else if ($calonSantri->payment_type == 'Lunas') {
+            $totalPaid = 9600000;
+            $remainingAmount = 0;
+        }
+
+        return response()->json([
+            'id' => $calonSantri->id,
+            'registration_number' => $formattedRegNumber,
+            'nama' => $calonSantri->nama,
+            'status' => $calonSantri->status,
+            'payment_type' => $calonSantri->payment_type,
+            'total_paid' => number_format($totalPaid, 0, ',', '.'),
+            'remaining_amount' => number_format($remainingAmount, 0, ',', '.'),
+            'payment_history' => $paymentHistory
+        ]);
+    }
+
+    /**
+     * Upload installment payment proof.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\CalonSantri  $calonSantri
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadInstallment(Request $request, CalonSantri $calonSantri): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'installment_amount' => 'required|numeric|min:1',
+            'installment_proof' => 'required|image|max:5120', // 5MB max
+            'installment_date' => 'required|date',
+            'installment_notes' => 'nullable|string|max:500',
+        ]);
+
+        // Check if the calon santri exists and has payment type 'Cicilan'
+        if (!$calonSantri || $calonSantri->payment_type != 'Cicilan') {
+            return redirect()->back()->with('error', 'Pembayaran cicilan hanya tersedia untuk pendaftar dengan jenis pembayaran cicilan.');
+        }
+
+        // Get the next installment number
+        $lastInstallment = PaymentInstallment::where('calon_santri_id', $calonSantri->id)
+            ->orderBy('installment_number', 'desc')
+            ->first();
+
+        $installmentNumber = $lastInstallment ? $lastInstallment->installment_number + 1 : 1;
+
+        // Store the payment proof
+        $proofPath = $request->file('installment_proof')->store('payment_proofs', 'public');
+
+        // Create new payment installment record
+        $installment = new PaymentInstallment();
+        $installment->calon_santri_id = $calonSantri->id;
+        $installment->installment_number = $installmentNumber;
+        $installment->amount = $request->installment_amount;
+        $installment->payment_date = $request->installment_date;
+        $installment->payment_proof = $proofPath;
+        $installment->notes = $request->installment_notes;
+        $installment->status = 'pending'; // Default status is pending until verified
+        $installment->save();
+
+        // Update the calon santri record
+        $calonSantri->status = 'pembayaran';
+        $calonSantri->save();
+
+        return redirect()->route('pendaftaran.show', $calonSantri->id)
+            ->with('success', 'Bukti pembayaran cicilan berhasil diunggah dan sedang menunggu verifikasi.');
+    }
+    /**
+     * Upload installment payment proof for unauthenticated users.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadInstallmentPublic(Request $request)
+    {
+        $request->validate([
+            'registration_number' => 'required|string',
+            'installment_amount' => 'required|numeric|min:1',
+            'installment_proof' => 'required|image|max:5120', // 5MB max
+            'installment_date' => 'required|date',
+            'installment_notes' => 'nullable|string|max:500',
+        ]);
+
+        // Find the calon santri by registration number
+        $calonSantri = CalonSantri::where('registration_number', $request->registration_number)
+            ->orWhere(function ($query) use ($request) {
+                // Also check for default registration number format
+                if (preg_match('/REG-(\d+)/', $request->registration_number, $matches)) {
+                    $id = (int) $matches[1];
+                    $query->where('id', $id);
+                }
+            })
+            ->first();
+
+        if (!$calonSantri) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor pendaftaran tidak ditemukan.'
+            ], 404);
+        }
+
+        // Check if the calon santri has payment type 'Cicilan'
+        if ($calonSantri->payment_type != 'Cicilan') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pembayaran cicilan hanya tersedia untuk pendaftar dengan jenis pembayaran cicilan.'
+            ], 400);
+        }
+
+        // Get the next installment number
+        $lastInstallment = PaymentInstallment::where('calon_santri_id', $calonSantri->id)
+            ->orderBy('installment_number', 'desc')
+            ->first();
+
+        $installmentNumber = $lastInstallment ? $lastInstallment->installment_number + 1 : 1;
+
+        // Store the payment proof
+        $proofPath = $request->file('installment_proof')->store('payment_proofs', 'public');
+
+        // Create new payment installment record
+        $installment = new PaymentInstallment();
+        $installment->calon_santri_id = $calonSantri->id;
+        $installment->installment_number = $installmentNumber;
+        $installment->amount = $request->installment_amount;
+        $installment->payment_date = $request->installment_date;
+        $installment->payment_proof = $proofPath;
+        $installment->notes = $request->installment_notes;
+        $installment->status = 'pending'; // Default status is pending until verified
+        $installment->save();
+
+        // Update the calon santri record
+        $calonSantri->status = 'pembayaran';
+        $calonSantri->save();
+
+        // Send notification to admin (optional)
+        // You can implement this using Laravel notifications
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Bukti pembayaran cicilan berhasil diunggah dan sedang menunggu verifikasi.',
+            'installment' => [
+                'id' => $installment->id,
+                'installment_number' => $installment->installment_number,
+                'amount' => $installment->amount,
+                'payment_date' => $installment->payment_date,
+                'status' => $installment->status
+            ]
+        ]);
+    }
+    /**
+     * View installment payments for a calon santri
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function viewInstallments($id)
+    {
+        $calonSantri = CalonSantri::findOrFail($id);
+        $installments = PaymentInstallment::where('calon_santri_id', $id)
+            ->orderBy('installment_number', 'asc')
+            ->get();
+
+        // Calculate total paid and remaining amount
+        $totalPaid = $installments->where('status', 'verified')->sum('amount');
+        $totalAmount = 9600000; // Total biaya administrasi
+        $remainingAmount = max(0, $totalAmount - $totalPaid);
+
+        return view('pendaftaran.installments', compact('calonSantri', 'installments', 'totalPaid', 'remainingAmount', 'totalAmount'));
+    }
+
+    /**
+     * Verify an installment payment
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $installmentId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyInstallment(Request $request, $installmentId)
+    {
+        $installment = PaymentInstallment::findOrFail($installmentId);
+        $installment->status = 'verified';
+        $installment->verified_by = auth()->id();
+        $installment->verified_at = now();
+        $installment->save();
+
+        // Check if all payments are complete
+        $calonSantri = CalonSantri::findOrFail($installment->calon_santri_id);
+        $totalPaid = PaymentInstallment::where('calon_santri_id', $calonSantri->id)
+            ->where('status', 'verified')
+            ->sum('amount');
+
+        // If total paid equals or exceeds the required amount, mark as complete
+        if ($totalPaid >= 9600000) {
+            $calonSantri->status = 'Selesai';
+            $calonSantri->save();
+        }
+
+        return redirect()->route('pendaftaran.viewInstallments', $installment->calon_santri_id)
+            ->with('success', 'Pembayaran cicilan berhasil diverifikasi.');
     }
 }

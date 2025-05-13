@@ -629,86 +629,170 @@
         </div>
     </section>
 
-    <!-- Facilities Section -->
+    <!-- Facilities Section (Completely New Content) -->
     <section class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text" data-aos="fade-up">Fasilitas</h2>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text" data-aos="fade-up">Program Pengembangan Diri
+                </h2>
                 <div class="w-24 h-1 bg-green-500 mx-auto mb-8" data-aos="fade-up" data-aos-delay="100"></div>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-                    Kami menyediakan fasilitas modern dan nyaman untuk mendukung proses belajar mengajar.
+                    Kami menyediakan berbagai kegiatan ekstrakurikuler untuk mengembangkan bakat dan potensi santri di luar
+                    pembelajaran akademik.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 items-center">
                 <div class="grid grid-cols-2 gap-4" data-aos="fade-right">
-                    <div class="bg-gray-200 rounded-lg h-48 pulse"></div>
-                    <div class="bg-gray-200 rounded-lg h-64 mt-8"></div>
-                    <div class="bg-gray-200 rounded-lg h-64"></div>
-                    <div class="bg-gray-200 rounded-lg h-48 mt-8 pulse"></div>
+                    <div class="bg-green-50 rounded-lg h-48 overflow-hidden shadow-md pulse">
+                        <img src="/placeholder.svg?height=192&width=256&query=islamic calligraphy art" alt="Kaligrafi"
+                            class="w-full h-full object-cover" />
+                    </div>
+                    <div class="bg-green-50 rounded-lg h-64 mt-8 overflow-hidden shadow-md">
+                        <img src="/placeholder.svg?height=256&width=256&query=martial arts training" alt="Pencak Silat"
+                            class="w-full h-full object-cover" />
+                    </div>
+                    <div class="bg-green-50 rounded-lg h-64 overflow-hidden shadow-md">
+                        <img src="/placeholder.svg?height=256&width=256&query=islamic public speaking" alt="Muhadharah"
+                            class="w-full h-full object-cover" />
+                    </div>
+                    <div class="bg-green-50 rounded-lg h-48 mt-8 overflow-hidden shadow-md pulse">
+                        <img src="/placeholder.svg?height=192&width=256&query=archery islamic sport" alt="Memanah"
+                            class="w-full h-full object-cover" />
+                    </div>
                 </div>
 
                 <div data-aos="fade-left">
-                    <h3 class="text-2xl font-bold mb-6 text-gray-800">Lingkungan Belajar yang Nyaman</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-gray-800">Ekstrakurikuler Unggulan</h3>
                     <ul class="space-y-4">
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Asrama putra dan putri yang terpisah dengan fasilitas lengkap</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Muhadharah (Public Speaking)</span>
+                                <p class="text-gray-600 text-sm mt-1">Latihan pidato dalam tiga bahasa (Indonesia, Arab, Inggris) untuk mempersiapkan santri menjadi da'i masa depan</p>
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Masjid sebagai pusat kegiatan ibadah dan pembelajaran</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Pencak Silat</span>
+                                <p class="text-gray-600 text-sm mt-1">Seni bela diri tradisional untuk melatih kedisiplinan, ketangkasan, dan ketahanan fisik santri</p>
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Ruang kelas yang nyaman dan dilengkapi dengan fasilitas
-                                modern</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Karate</span>
+                                <p class="text-gray-600 text-sm mt-1">Bela diri dari Jepang yang mengajarkan disiplin, fokus, dan teknik pertahanan diri</p>
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Perpustakaan dengan koleksi buku yang lengkap</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Boxing</span>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga tinju untuk melatih kekuatan, ketahanan, dan strategi dalam pertandingan</p>
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Laboratorium komputer dan bahasa</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Tricking</span>
+                                <p class="text-gray-600 text-sm mt-1">Kombinasi gerakan akrobatik seperti parkour yang mengembangkan kelenturan dan keberanian santri</p>
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-3 mt-0.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span class="text-gray-600">Fasilitas olahraga dan area rekreasi</span>
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Bulu Tangkis</span>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga raket yang melatih kelincahan, refleks, dan koordinasi mata-tangan</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Hadroh</span>
+                                <p class="text-gray-600 text-sm mt-1">Seni musik islami dengan rebana yang mengembangkan keterampilan musikal dan melestarikan tradisi</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Qori'</span>
+                                <p class="text-gray-600 text-sm mt-1">Pelatihan seni baca Al-Qur'an dengan tajwid dan irama yang indah</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Futsal</span>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga tim yang mengembangkan kerja sama, strategi, dan kebugaran fisik</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Voli</span>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga bola voli yang melatih koordinasi, kerjasama tim, dan kemampuan motorik</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-800 font-medium">Jurnalistik & Media</span>
+                                <p class="text-gray-600 text-sm mt-1">Pelatihan penulisan, fotografi, dan produksi konten digital untuk mengembangkan keterampilan komunikasi</p>
+                            </div>
                         </li>
                     </ul>
-                    <a href="{{ url('/gallery/foto') }}"
-                        class="inline-flex items-center mt-6 text-green-600 font-medium hover:text-green-700">
-                        Lihat Galeri Fasilitas
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </a>
+
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Testimonials Section -->
     <section class="py-16 md:py-24 bg-gray-50 overflow-hidden">

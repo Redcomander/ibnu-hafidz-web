@@ -556,7 +556,7 @@
                     <div class="relative">
                         <div class="absolute -top-4 -left-4 w-24 h-24 bg-green-100 rounded-tl-3xl z-0"></div>
                         <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-green-100 rounded-br-3xl z-0"></div>
-                        <img src="/placeholder.svg?height=500&width=600" alt="Tentang Ibnu Hafidz"
+                        <img src="{{ asset('drone1.jfif') }}" alt="Tentang Ibnu Hafidz"
                             class="rounded-xl shadow-xl w-full bg-gray-200 relative z-10">
                     </div>
                 </div>
@@ -604,86 +604,199 @@
         </div>
     </section>
 
-    <!-- Vision & Mission Section -->
-    <section class="py-20 md:py-28 bg-gray-50 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-container">
+    <!-- Vision & Mission Section - Redesigned -->
+    <section class="py-20 md:py-28 bg-gray-50 relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-green-300 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-green-300 rounded-full translate-x-1/3 translate-y-1/3">
+            </div>
+            <div class="absolute top-1/4 right-1/4 w-32 h-32 bg-yellow-300 rounded-full"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-48 h-48 bg-yellow-300 rounded-full opacity-50"></div>
+            <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="pattern-circles" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"
+                    patternContentUnits="userSpaceOnUse">
+                    <circle id="pattern-circle" cx="10" cy="10" r="1.6257413380501518" fill="#4CAF50" fill-opacity="0.1">
+                    </circle>
+                </pattern>
+                <rect id="rect" x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-container relative z-10">
             <div class="text-center mb-16">
-                <h2 class="section-title-center text-3xl md:text-4xl font-bold mb-8 gradient-text" data-aos="fade-up">Visi &
-                    Misi</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-                    Komitmen kami untuk memberikan pendidikan berkualitas dan membentuk generasi Qur'ani
+                <span class="inline-block px-4 py-1 bg-green-100 text-green-700 rounded-full mb-4 text-sm font-semibold"
+                    data-aos="fade-up">Arah & Tujuan</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 gradient-text" data-aos="fade-up">Visi & Misi</h2>
+                <div class="w-24 h-1 bg-green-500 mx-auto mb-8" data-aos="fade-up" data-aos-delay="100"></div>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                    Komitmen kami untuk memberikan pendidikan berkualitas dan membentuk generasi Qur'ani yang berakhlak
+                    mulia
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-10">
-                <div class="card p-8" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                        <i class="fas fa-eye text-green-600 text-3xl"></i>
+            <!-- Vision Section -->
+            <div class="mb-16" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative">
+                    <!-- Vision Header -->
+                    <div class="flex items-center justify-center mb-8">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-green-700">Visi</h3>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Visi</h3>
-                    <p class="text-gray-600 text-center text-lg italic mb-8">
-                        "Menjadi lembaga pendidikan Islam terkemuka yang melahirkan generasi Qur'ani, berakhlak mulia, dan
-                        berprestasi global."
-                    </p>
-                    <div class="mt-8 bg-green-50 p-6 rounded-xl">
-                        <h4 class="text-lg font-semibold mb-4 text-green-700">Tujuan Utama:</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
-                                <span class="text-gray-700">Mencetak generasi penghafal Al-Qur'an yang memahami dan
-                                    mengamalkan isinya</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
-                                <span class="text-gray-700">Membentuk karakter Islami yang kuat berdasarkan nilai-nilai
-                                    Al-Qur'an dan Sunnah</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
-                                <span class="text-gray-700">Mengembangkan potensi akademik dan non-akademik untuk menghadapi
-                                    tantangan global</span>
-                            </li>
-                        </ul>
+
+                    <!-- Vision Content -->
+                    <div
+                        class="relative rounded-3xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
+                        <!-- Background image with overlay -->
+                        <div class="absolute inset-0 bg-cover bg-center"
+                            style="background-image: url('/placeholder.svg?height=400&width=1200&query=islamic school students with books');">
+                            <div class="absolute inset-0 bg-gradient-to-r from-green-900/90 to-green-600/90"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="relative z-10 p-10 md:p-16">
+                            <div class="max-w-4xl mx-auto text-center">
+                                <h4 class="text-3xl md:text-4xl font-bold text-white uppercase tracking-wide mb-6">
+                                    Menjadi Pesantren Terbaik Di Indonesia
+                                </h4>
+                                <p class="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
+                                    Melahirkan Generasi Berakhlak Mulia Yang Mandiri dan Memiliki Jiwa Kepemimpinan,
+                                    Berwawasan Global dan Berprestasi Tingkat Internasional.
+                                </p>
+
+                                <!-- Decorative elements -->
+                                <div class="flex justify-center">
+                                    <div class="w-32 h-1 bg-yellow-400"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card p-8" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                        <i class="fas fa-bullseye text-green-600 text-3xl"></i>
+            <!-- Mission Section -->
+            <div data-aos="fade-up" data-aos-delay="400">
+                <div class="relative">
+                    <!-- Mission Header -->
+                    <div class="flex items-center justify-center mb-8">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-green-700">Misi</h3>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Misi</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <span
-                                class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full mr-3 font-bold">1</span>
-                            <span class="text-gray-700">Menyelenggarakan pendidikan berbasis Al-Qur'an dan Sunnah dengan
-                                metode pembelajaran modern yang efektif</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span
-                                class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full mr-3 font-bold">2</span>
-                            <span class="text-gray-700">Mengembangkan potensi santri secara komprehensif melalui program
-                                tahfidz intensif dan pendampingan personal</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span
-                                class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full mr-3 font-bold">3</span>
-                            <span class="text-gray-700">Membangun karakter Islami melalui pembiasaan akhlak mulia dalam
-                                kehidupan sehari-hari dan keteladanan</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span
-                                class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full mr-3 font-bold">4</span>
-                            <span class="text-gray-700">Mengembangkan kemampuan bahasa Arab dan Inggris untuk menghadapi
-                                tantangan global dan dakwah internasional</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span
-                                class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full mr-3 font-bold">5</span>
-                            <span class="text-gray-700">Mempersiapkan santri untuk melanjutkan pendidikan ke jenjang yang
-                                lebih tinggi baik di dalam maupun luar negeri</span>
-                        </li>
-                    </ul>
+
+                    <!-- Mission Content -->
+                    <div class="grid md:grid-cols-3 gap-4 md:gap-6">
+                        <!-- First section with dark green background -->
+                        <div
+                            class="bg-gradient-to-br from-green-800 to-green-600 text-white p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
+                            <div class="relative">
+                                <!-- Decorative elements -->
+                                <div class="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-white/5 rounded-full"></div>
+
+                                <h4 class="text-xl font-bold mb-6 relative z-10">Pendidikan Berkualitas</h4>
+                                <ul class="space-y-4 relative z-10">
+                                    <li class="flex items-start">
+                                        <span
+                                            class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 text-white rounded-full mr-3 font-bold">1</span>
+                                        <span>Menyelenggarakan pendidikan yang profesional, berorientasi pada mutu,
+                                            spiritual, intelektual dan moral, berbasis Al-Qur'an.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span
+                                            class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 text-white rounded-full mr-3 font-bold">2</span>
+                                        <span>Menerapkan pembelajaran aktif, inovatif, kreatif dan efektif</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Middle section with light green background -->
+                        <div
+                            class="bg-gradient-to-br from-green-300 to-green-200 text-gray-800 p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
+                            <div class="relative">
+                                <!-- Decorative elements -->
+                                <div class="absolute -top-4 -right-4 w-16 h-16 bg-green-400/20 rounded-full"></div>
+                                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-green-400/10 rounded-full"></div>
+
+                                <h4 class="text-xl font-bold mb-6 text-green-800 relative z-10">Pembinaan Karakter</h4>
+                                <ul class="space-y-4 relative z-10">
+                                    <li class="flex items-start">
+                                        <span
+                                            class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-green-500/20 text-green-800 rounded-full mr-3 font-bold">•</span>
+                                        <span>Membina dan mendidik generasi muslim, memiliki jiwa yang ikhlas, mandiri,
+                                            sehat jasmani dan rohani, berakhlak mulia serta bermanfaat untuk semua.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Last section with dark green background -->
+                        <div
+                            class="bg-gradient-to-br from-green-800 to-green-600 text-white p-8 rounded-3xl shadow-xl transform transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
+                            <div class="relative">
+                                <!-- Decorative elements -->
+                                <div class="absolute -top-4 -right-4 w-16 h-16 bg-white/10 rounded-full"></div>
+                                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-white/5 rounded-full"></div>
+
+                                <h4 class="text-xl font-bold mb-6 relative z-10">Pengembangan Potensi</h4>
+                                <ul class="space-y-4 relative z-10">
+                                    <li class="flex items-start">
+                                        <span
+                                            class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 text-white rounded-full mr-3 font-bold">•</span>
+                                        <span>Menyelenggarakan program intensif agar peserta didik mampu melanjutkan ke
+                                            Perguruan Tinggi Negeri dan Luar Negeri.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span
+                                            class="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white/20 text-white rounded-full mr-3 font-bold">•</span>
+                                        <span>Mengembangkan keunggulan potensi dan berkompetensi di dunia
+                                            internasional.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Values Section (Additional) -->
+            <div class="mt-16 text-center" data-aos="fade-up" data-aos-delay="500">
+                <h3 class="text-2xl font-bold text-green-700 mb-8">Nilai-Nilai Kami</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div
+                        class="bg-white px-6 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-green-700 font-semibold">Keimanan</span>
+                    </div>
+                    <div
+                        class="bg-white px-6 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-green-700 font-semibold">Kemandirian</span>
+                    </div>
+                    <div
+                        class="bg-white px-6 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-green-700 font-semibold">Kepemimpinan</span>
+                    </div>
+                    <div
+                        class="bg-white px-6 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-green-700 font-semibold">Akhlak Mulia</span>
+                    </div>
+                    <div
+                        class="bg-white px-6 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-green-700 font-semibold">Wawasan Global</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1015,265 +1128,46 @@
         </div>
     </section>
 
-    <!-- Extracurricular Section -->
-    <section class="py-20 md:py-28 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-container">
-            <div class="text-center mb-16">
-                <h2 class="section-title-center text-3xl md:text-4xl font-bold mb-8 gradient-text" data-aos="fade-up">
-                    Kegiatan Ekstrakurikuler</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-                    Berbagai kegiatan untuk mengembangkan bakat dan minat santri di luar kegiatan akademik
-                </p>
+    <!-- Leadership Section - Clean and Simple Design -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Simple Header -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-green-700 mb-4" data-aos="fade-up">Pendiri Pondok</h2>
+                <div class="w-16 h-1 bg-green-500 mx-auto mb-4"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Olahraga" class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Olahraga</h3>
-                        <p class="text-gray-600 mb-4">
-                            Berbagai kegiatan olahraga seperti sepak bola, bulu tangkis, tenis meja, dan panahan untuk
-                            menjaga kesehatan fisik santri.
-                        </p>
-                        <ul class="space-y-2">
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Sepak Bola & Futsal</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Bulu Tangkis</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Panahan (Memanah Sunnah)</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Berenang</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Seni dan Budaya"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Seni dan Budaya</h3>
-                        <p class="text-gray-600 mb-4">
-                            Kegiatan seni seperti kaligrafi, nasyid, dan hadrah untuk mengembangkan kreativitas dan
-                            apresiasi seni Islami.
-                        </p>
-                        <ul class="space-y-2">
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Kaligrafi Islam</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Nasyid & Vocal Group</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Hadrah & Marawis</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Tilawah Al-Qur'an</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Keterampilan"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Keterampilan</h3>
-                        <p class="text-gray-600 mb-4">
-                            Pelatihan keterampilan seperti public speaking, jurnalistik, dan entrepreneurship untuk
-                            mempersiapkan santri di masa depan.
-                        </p>
-                        <ul class="space-y-2">
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Public Speaking & Khitobah</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Jurnalistik & Penulisan</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Entrepreneurship</span>
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <i class="fas fa-circle text-green-500 text-xs mr-2"></i>
-                                <span>Teknologi Informasi</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Leadership Team Section (Modified) -->
-    <section class="py-20 md:py-28 bg-gray-50 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-container">
-            <div class="text-center mb-16">
-                <h2 class="section-title-center text-3xl md:text-4xl font-bold mb-8 gradient-text" data-aos="fade-up">
-                    Pimpinan</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-                    Mengenal sosok di balik kesuksesan Pondok Pesantren Ibnu Hafidz
-                </p>
-            </div>
-
-            <div class="flex justify-center">
-                <div class="team-card max-w-md" data-aos="fade-up" data-aos-delay="100">
-                    <div class="team-image-container">
-                        <img src="/placeholder.svg?height=300&width=400" alt="Al-Ustadz Taslim Hafidz, Lc."
-                            class="team-image bg-gray-200">
-                        <div class="team-overlay">
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+            <!-- Clean Card Design -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-up">
+                <div class="md:flex">
+                    <!-- Left: Image -->
+                    <div class="md:w-1/3 bg-green-600">
+                        <div class="h-full flex items-center justify-center p-6">
+                            <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-white">
+                                <img src="/placeholder.svg?height=200&width=200&query=islamic scholar with white robe"
+                                    alt="Ust. Taslim hafidz" class="w-full h-full object-cover">
                             </div>
                         </div>
                     </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold mb-2">Al-Ustadz Taslim Hafidz, Lc.</h3>
-                        <p class="text-green-600 mb-4 font-medium">Pendiri & Pimpinan Pesantren</p>
-                        <p class="text-gray-600">
-                            Alumni Universitas Al-Azhar Cairo Mesir dengan pengalaman mengajar dan mengelola pendidikan
-                            Islam selama lebih dari 15 tahun. Beliau memiliki dedikasi tinggi dalam pengembangan pendidikan
-                            Islam
-                            yang berkualitas dan pembentukan generasi Qur'ani.
-                        </p>
-                        <div class="mt-6 pt-6 border-t border-gray-100">
-                            <div class="flex items-center mb-2">
-                                <i class="fas fa-graduation-cap text-green-600 mr-3"></i>
-                                <span class="text-gray-700">Lulusan Universitas Al-Azhar Cairo, Mesir</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-book text-green-600 mr-3"></i>
-                                <span class="text-gray-700">Hafidz Al-Qur'an 30 Juz</span>
-                            </div>
+
+                    <!-- Right: Content -->
+                    <div class="md:w-2/3 p-6 md:p-8">
+                        <h3 class="text-2xl font-bold text-green-700 mb-4">Ust. Taslim hafidz, Lc</h3>
+
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-green-600 mb-2">Pendidikan:</h4>
+                            <p class="text-gray-700">
+                                Belajar di Al-Mawaddah Jakarta, lanjut ke Suriah, & Sarjana di Al-Azhar
+                            </p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Facilities Section -->
-    <section class="py-20 md:py-28 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-container">
-            <div class="text-center mb-16">
-                <h2 class="section-title-center text-3xl md:text-4xl font-bold mb-8 gradient-text" data-aos="fade-up">
-                    Fasilitas Kami</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-                    Fasilitas modern dan nyaman untuk mendukung kegiatan belajar mengajar dan pengembangan santri
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Masjid" class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Masjid</h3>
-                        <p class="text-gray-600">
-                            Masjid sebagai pusat kegiatan ibadah dan pembelajaran Al-Qur'an dengan kapasitas 1000 jamaah,
-                            dilengkapi dengan sound system dan pendingin ruangan.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Asrama" class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Asrama</h3>
-                        <p class="text-gray-600">
-                            Asrama putra dan putri yang terpisah dengan fasilitas lengkap untuk kenyamanan santri, termasuk
-                            kamar mandi dalam, lemari, dan meja belajar.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Ruang Kelas"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Ruang Kelas</h3>
-                        <p class="text-gray-600">
-                            Ruang kelas yang nyaman dan dilengkapi dengan fasilitas modern seperti proyektor, AC, dan papan
-                            tulis interaktif untuk mendukung proses belajar mengajar.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Perpustakaan"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Perpustakaan</h3>
-                        <p class="text-gray-600">
-                            Perpustakaan dengan koleksi buku yang lengkap, termasuk kitab-kitab klasik, buku referensi
-                            modern, dan akses digital untuk mendukung kegiatan belajar santri.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Laboratorium"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Laboratorium</h3>
-                        <p class="text-gray-600">
-                            Laboratorium komputer, bahasa, dan sains yang lengkap untuk mengembangkan keterampilan santri
-                            dalam teknologi, bahasa, dan ilmu pengetahuan.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="facility-card" data-aos="fade-up" data-aos-delay="600">
-                    <div class="facility-image-container">
-                        <img src="/placeholder.svg?height=200&width=400" alt="Fasilitas Olahraga"
-                            class="facility-image bg-gray-200">
-                        <div class="facility-overlay"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-green-700">Fasilitas Olahraga</h3>
-                        <p class="text-gray-600">
-                            Lapangan olahraga multifungsi, lapangan futsal, lapangan basket, dan area rekreasi untuk
-                            kegiatan ekstrakurikuler dan pengembangan fisik santri.
-                        </p>
+                        <div>
+                            <h4 class="font-semibold text-green-600 mb-2">Pengalaman:</h4>
+                            <p class="text-gray-700">
+                                Di Damaskus, Beliau belajar langsung dengan Syekh Sa'id Ramadhan Al-Bouty (ilmuwan Suriah,
+                                salah satu ulama' rujukan dunia).
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

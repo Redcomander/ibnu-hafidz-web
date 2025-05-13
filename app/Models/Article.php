@@ -9,49 +9,105 @@ class Article extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'title',
         'slug',
-        'thumbnail',
-        'excerpt',
         'body',
+        'excerpt',
+        'thumbnail',
+        'category_id',
+        'author_id',
         'status',
         'published_at',
-        'author_id',
-        'category_id'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'published_at' => 'datetime',
     ];
 
-    public function author()
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return 'slug';
     }
 
+    /**
+     * Get the category that owns the article.
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Get the author that owns the article.
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    /**
+     * Get the comments for the article.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->whereNull('parent_id');
+    }
+
+    /**
+     * Get the tags for the article.
+     */
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    public function comments()
+    /**
+     * Get the views for the article.
+     */
+    public function views()
     {
-        return $this->hasMany(Comment::class)->whereNull('parent_id')->orderBy('created_at', 'desc');
+        return $this->hasMany(ArticleView::class);
     }
 
     /**
-     * Get the comment count for the article.
+     * Get the total view count for the article.
      */
-    public function getCommentsCountAttribute()
+    public function getViewsCountAttribute()
     {
-        // Count both root comments and replies
-        return $this->hasMany(Comment::class)->count();
+        return $this->views()->count();
     }
 
+    /**
+     * Get the unique view count for the article.
+     */
+    public function getUniqueViewsCountAttribute()
+    {
+        return $this->views()->distinct('ip_address')->count('ip_address');
+    }
+
+    /**
+     * Scope a query to only include published articles.
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
 }

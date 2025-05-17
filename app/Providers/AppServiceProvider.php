@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app['router']->aliasMiddleware('track.visitors', \App\Http\Middleware\TrackVisitors::class);
     }
 }

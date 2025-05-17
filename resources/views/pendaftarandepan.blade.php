@@ -4,8 +4,20 @@
 
 @section('head')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Store the current step in localStorage as a backup
+        function storeCurrentStep(step) {
+            localStorage.setItem('currentStep', step);
+        }
+
+        // Get the current step from localStorage
+        function getStoredStep() {
+            return localStorage.getItem('currentStep');
+        }
+    </script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         /* Unique hero style for pendaftaran page */
@@ -1372,12 +1384,12 @@
                         <form id="track-form" action="{{ route('pendaftaran.track') }}" method="POST">
                             @csrf
                             <div class="mb-4">
-                                <label for="registration_number"
+                                <label for="nomor_pendaftaran"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nomor
                                     Pendaftaran</label>
-                                <input type="text" id="registration_number" name="registration_number"
+                                <input type="text" id="nomor_pendaftaran" name="nomor_pendaftaran"
                                     class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    placeholder="Contoh: REG-00001" required>
+                                    placeholder="Contoh: PSB-202505-0001" required>
                             </div>
 
                             <div class="mt-6">
@@ -1425,19 +1437,23 @@
 
             <!-- Steps indicator -->
             <div class="steps-container" data-aos="fade-up" data-aos-delay="300">
-                <div class="step active" data-step="formulir">
+                <div class="step {{ isset($currentStep) && $currentStep == 'formulir' ? 'active' : '' }} {{ isset($currentStep) && in_array($currentStep, ['checking', 'pembayaran', 'berhasil']) ? 'completed' : '' }}"
+                    data-step="formulir">
                     1
                     <span class="step-label">Formulir</span>
                 </div>
-                <div class="step" data-step="checking">
+                <div class="step {{ isset($currentStep) && $currentStep == 'checking' ? 'active' : '' }} {{ isset($currentStep) && in_array($currentStep, ['pembayaran', 'berhasil']) ? 'completed' : '' }}"
+                    data-step="checking">
                     2
                     <span class="step-label">Checking Data</span>
                 </div>
-                <div class="step" data-step="pembayaran">
+                <div class="step {{ isset($currentStep) && $currentStep == 'pembayaran' ? 'active' : '' }} {{ isset($currentStep) && $currentStep == 'berhasil' ? 'completed' : '' }}"
+                    data-step="pembayaran">
                     3
                     <span class="step-label">Pembayaran</span>
                 </div>
-                <div class="step" data-step="berhasil">
+                <div class="step {{ isset($currentStep) && $currentStep == 'berhasil' ? 'active' : '' }}"
+                    data-step="berhasil">
                     4
                     <span class="step-label">Pendaftaran Berhasil</span>
                 </div>
@@ -1446,7 +1462,8 @@
             <!-- Multi-step form container -->
             <div id="registration-form-container">
                 <!-- Step 1: Formulir -->
-                <div class="step-section active" id="step-formulir">
+                <div class="step-section {{ !isset($currentStep) || $currentStep == 'formulir' ? 'active' : '' }}"
+                    id="step-formulir">
                     <!-- Information Card -->
                     <div class="info-card" data-aos="fade-up" data-aos-delay="400">
                         <div class="info-card-title">
@@ -1483,7 +1500,8 @@
                                 <div class="form-group">
                                     <label for="nama" class="form-label required-field">Nama</label>
                                     <input type="text" id="nama" name="nama" class="form-input"
-                                        placeholder="Masukkan nama lengkap" required>
+                                        placeholder="Masukkan nama lengkap" required
+                                        value="{{ $calonSantriData->nama ?? old('nama') }}">
                                     <div class="form-error" id="error-nama"></div>
                                 </div>
 
@@ -1491,14 +1509,15 @@
                                     <div class="form-group">
                                         <label for="tempat_lahir" class="form-label required-field">Tempat Lahir</label>
                                         <input type="text" id="tempat_lahir" name="tempat_lahir" class="form-input"
-                                            placeholder="Masukkan tempat lahir" required>
+                                            placeholder="Masukkan tempat lahir" required
+                                            value="{{ $calonSantriData->tempat_lahir ?? old('tempat_lahir') }}">
                                         <div class="form-error" id="error-tempat_lahir"></div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="tanggal_lahir" class="form-label required-field">Tanggal Lahir</label>
                                         <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-input"
-                                            required>
+                                            required value="{{ $calonSantriData->tanggal_lahir ?? old('tanggal_lahir') }}">
                                         <div class="form-error" id="error-tanggal_lahir"></div>
                                     </div>
                                 </div>
@@ -1506,7 +1525,8 @@
                                 <div class="form-group">
                                     <label for="alamat" class="form-label required-field">Alamat</label>
                                     <textarea id="alamat" name="alamat" class="form-textarea"
-                                        placeholder="Masukkan alamat lengkap" required></textarea>
+                                        placeholder="Masukkan alamat lengkap"
+                                        required>{{ $calonSantriData->alamat ?? old('alamat') }}</textarea>
                                     <div class="form-error" id="error-alamat"></div>
                                 </div>
 
@@ -1514,14 +1534,16 @@
                                     <div class="form-group">
                                         <label for="nama_ayah" class="form-label required-field">Nama Ayah</label>
                                         <input type="text" id="nama_ayah" name="nama_ayah" class="form-input"
-                                            placeholder="Masukkan nama ayah" required>
+                                            placeholder="Masukkan nama ayah" required
+                                            value="{{ $calonSantriData->nama_ayah ?? old('nama_ayah') }}">
                                         <div class="form-error" id="error-nama_ayah"></div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="nama_ibu" class="form-label required-field">Nama Ibu</label>
                                         <input type="text" id="nama_ibu" name="nama_ibu" class="form-input"
-                                            placeholder="Masukkan nama ibu" required>
+                                            placeholder="Masukkan nama ibu" required
+                                            value="{{ $calonSantriData->nama_ibu ?? old('nama_ibu') }}">
                                         <div class="form-error" id="error-nama_ibu"></div>
                                     </div>
                                 </div>
@@ -1529,14 +1551,16 @@
                                 <div class="form-group">
                                     <label for="no_whatsapp" class="form-label required-field">No WhatsApp</label>
                                     <input type="tel" id="no_whatsapp" name="no_whatsapp" class="form-input"
-                                        placeholder="Contoh: 08123456789" required>
+                                        placeholder="Contoh: 08123456789" required
+                                        value="{{ $calonSantriData->no_whatsapp ?? old('no_whatsapp') }}">
                                     <div class="form-error" id="error-no_whatsapp"></div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="asal_sekolah" class="form-label required-field">Asal Sekolah</label>
                                     <input type="text" id="asal_sekolah" name="asal_sekolah" class="form-input"
-                                        placeholder="Masukkan asal sekolah" required>
+                                        placeholder="Masukkan asal sekolah" required
+                                        value="{{ $calonSantriData->asal_sekolah ?? old('asal_sekolah') }}">
                                     <div class="form-error" id="error-asal_sekolah"></div>
                                 </div>
 
@@ -1545,12 +1569,12 @@
                                     <div class="radio-group">
                                         <div class="radio-option">
                                             <input type="radio" id="laki_laki" name="jenis_kelamin" value="Laki-laki"
-                                                class="radio-input" required>
+                                                class="radio-input" required {{ (isset($calonSantriData) && $calonSantriData->jenis_kelamin == 'Laki-laki') || old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '' }}>
                                             <label for="laki_laki">Laki-laki</label>
                                         </div>
                                         <div class="radio-option">
                                             <input type="radio" id="perempuan" name="jenis_kelamin" value="Perempuan"
-                                                class="radio-input">
+                                                class="radio-input" {{ (isset($calonSantriData) && $calonSantriData->jenis_kelamin == 'Perempuan') || old('jenis_kelamin') == 'Perempuan' ? 'checked' : '' }}>
                                             <label for="perempuan">Perempuan</label>
                                         </div>
                                     </div>
@@ -1571,7 +1595,8 @@
                 </div>
 
                 <!-- Step 2: Checking Data -->
-                <div class="step-section" id="step-checking">
+                <div class="step-section {{ isset($currentStep) && $currentStep == 'checking' ? 'active' : '' }}"
+                    id="step-checking">
                     <div class="info-card" data-aos="fade-up" data-aos-delay="400">
                         <div class="info-card-title">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -1600,19 +1625,24 @@
                                     <div class="space-y-3">
                                         <div>
                                             <span class="text-gray-500">Nama:</span>
-                                            <p class="font-medium" id="checking-nama"></p>
+                                            <p class="font-medium" id="checking-nama">{{ $calonSantriData->nama ?? '' }}</p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">Tempat, Tanggal Lahir:</span>
-                                            <p class="font-medium" id="checking-ttl"></p>
+                                            <p class="font-medium" id="checking-ttl">
+                                                {{ isset($calonSantriData) ? $calonSantriData->tempat_lahir . ', ' . date('d-m-Y', strtotime($calonSantriData->tanggal_lahir)) : '' }}
+                                            </p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">Jenis Kelamin:</span>
-                                            <p class="font-medium" id="checking-jenis-kelamin"></p>
+                                            <p class="font-medium" id="checking-jenis-kelamin">
+                                                {{ $calonSantriData->jenis_kelamin ?? '' }}
+                                            </p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">Alamat:</span>
-                                            <p class="font-medium" id="checking-alamat"></p>
+                                            <p class="font-medium" id="checking-alamat">{{ $calonSantriData->alamat ?? '' }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1622,19 +1652,27 @@
                                     <div class="space-y-3">
                                         <div>
                                             <span class="text-gray-500">Nama Ayah:</span>
-                                            <p class="font-medium" id="checking-nama-ayah"></p>
+                                            <p class="font-medium" id="checking-nama-ayah">
+                                                {{ $calonSantriData->nama_ayah ?? '' }}
+                                            </p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">Nama Ibu:</span>
-                                            <p class="font-medium" id="checking-nama-ibu"></p>
+                                            <p class="font-medium" id="checking-nama-ibu">
+                                                {{ $calonSantriData->nama_ibu ?? '' }}
+                                            </p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">No. WhatsApp:</span>
-                                            <p class="font-medium" id="checking-no-whatsapp"></p>
+                                            <p class="font-medium" id="checking-no-whatsapp">
+                                                {{ $calonSantriData->no_whatsapp ?? '' }}
+                                            </p>
                                         </div>
                                         <div>
                                             <span class="text-gray-500">Asal Sekolah:</span>
-                                            <p class="font-medium" id="checking-asal-sekolah"></p>
+                                            <p class="font-medium" id="checking-asal-sekolah">
+                                                {{ $calonSantriData->asal_sekolah ?? '' }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1662,20 +1700,24 @@
                                         Kembali
                                     </button>
 
-                                    <!-- Make sure the button is not inside a form or is properly set up -->
-                                    <button type="button" id="submit-checking"
-                                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                        <span id="checking-submit-text">Lanjutkan ke Pembayaran</span>
-                                        <span id="checking-loading" style="display: none;">
-                                            <span class="spinner"></span> Memproses...
-                                        </span>
-                                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
+                                    <form id="checking-form" action="{{ route('pendaftaran.checking') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="calon_santri_id"
+                                            value="{{ $calonSantriData->id ?? '' }}">
+                                        <button type="submit" id="submit-checking"
+                                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                            <span id="checking-submit-text">Lanjutkan ke Pembayaran</span>
+                                            <span id="checking-loading" style="display: none;">
+                                                <span class="spinner"></span> Memproses...
+                                            </span>
+                                            <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -1683,7 +1725,8 @@
                 </div>
 
                 <!-- Step 3: Pembayaran -->
-                <div class="step-section" id="step-pembayaran">
+                <div class="step-section {{ isset($currentStep) && $currentStep == 'pembayaran' ? 'active' : '' }}"
+                    id="step-pembayaran">
                     <div class="info-card" data-aos="fade-up" data-aos-delay="400">
                         <div class="info-card-title">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -1713,13 +1756,18 @@
                             <h3 class="text-xl font-bold">Unggah Bukti Pembayaran</h3>
                         </div>
                         <div class="form-body">
-                            <form id="pembayaran-form">
+                            <form id="pembayaran-form" action="{{ route('pendaftaran.pembayaran') }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="calon_santri_id" value="{{ $calonSantriData->id ?? '' }}">
+
                                 <div class="form-group">
                                     <label class="form-label required-field">Pilih Jenis Pembayaran</label>
                                     <div class="payment-type-container">
-                                        <label class="payment-type-option" id="payment-lunas">
-                                            <input type="radio" name="payment_type" value="Lunas" required>
+                                        <label
+                                            class="payment-type-option {{ isset($calonSantriData) && $calonSantriData->payment_type == 'Lunas' ? 'selected' : '' }}"
+                                            id="payment-lunas">
+                                            <input type="radio" name="payment_type" value="Lunas" required {{ isset($calonSantriData) && $calonSantriData->payment_type == 'Lunas' ? 'checked' : '' }}>
                                             <div class="payment-type-header">
                                                 <div class="payment-type-radio"></div>
                                                 <div class="payment-type-title">Pembayaran Lunas</div>
@@ -1729,14 +1777,16 @@
                                             </div>
                                         </label>
 
-                                        <label class="payment-type-option" id="payment-cicilan">
-                                            <input type="radio" name="payment_type" value="Cicilan" required>
+                                        <label
+                                            class="payment-type-option {{ isset($calonSantriData) && $calonSantriData->payment_type == 'Cicilan' ? 'selected' : '' }}"
+                                            id="payment-cicilan">
+                                            <input type="radio" name="payment_type" value="Cicilan" required {{ isset($calonSantriData) && $calonSantriData->payment_type == 'Cicilan' ? 'checked' : '' }}>
                                             <div class="payment-type-header">
                                                 <div class="payment-type-radio"></div>
                                                 <div class="payment-type-title">Pembayaran Cicilan</div>
                                             </div>
                                             <div class="payment-type-description">
-                                                Minimal Rp 600.000 (pendaftaran)
+                                                Minimal Rp 1.000.000 (pendaftaran)
                                             </div>
                                         </label>
                                     </div>
@@ -1751,11 +1801,14 @@
                                                 class="hidden" required>
                                             <label for="payment_proof"
                                                 class="cursor-pointer flex flex-col items-center justify-center">
-                                                <div id="preview-container" style="display: none;">
-                                                    <img id="preview-image" src="/placeholder.svg"
+                                                <div id="preview-container"
+                                                    style="{{ isset($calonSantriData) && $calonSantriData->payment_proof ? '' : 'display: none;' }}">
+                                                    <img id="preview-image"
+                                                        src="{{ isset($calonSantriData) && $calonSantriData->payment_proof ? asset('storage/' . $calonSantriData->payment_proof) : '/placeholder.svg' }}"
                                                         alt="Preview bukti pembayaran" class="file-preview">
                                                 </div>
-                                                <div id="upload-icon">
+                                                <div id="upload-icon"
+                                                    style="{{ isset($calonSantriData) && $calonSantriData->payment_proof ? 'display: none;' : '' }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="h-12 w-12 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24"
                                                         stroke="currentColor">
@@ -1765,7 +1818,7 @@
                                                     </svg>
                                                 </div>
                                                 <span class="text-sm font-medium text-gray-700" id="upload-text">
-                                                    Klik untuk mengunggah bukti pembayaran
+                                                    {{ isset($calonSantriData) && $calonSantriData->payment_proof ? 'Ganti gambar' : 'Klik untuk mengunggah bukti pembayaran' }}
                                                 </span>
                                                 <span class="text-xs text-gray-500 mt-1">JPG, PNG, atau JPEG (Maks.
                                                     5MB)</span>
@@ -1800,7 +1853,8 @@
                 </div>
 
                 <!-- Step 4: Pendaftaran Berhasil -->
-                <div class="step-section" id="step-berhasil">
+                <div class="step-section {{ isset($currentStep) && $currentStep == 'berhasil' ? 'active' : '' }}"
+                    id="step-berhasil">
                     <div class="form-container" data-aos="fade-up" data-aos-delay="500">
                         <div class="form-header">
                             <h3 class="text-xl font-bold">Pendaftaran Berhasil!</h3>
@@ -1823,7 +1877,9 @@
 
                             <div class="registration-number">
                                 <h4 class="font-semibold text-gray-700">Nomor Pendaftaran:</h4>
-                                <p class="registration-number-value" id="nomor-pendaftaran">PSB-0000</p>
+                                <p class="registration-number-value" id="nomor-pendaftaran">
+                                    {{ isset($calonSantriData) && $calonSantriData->nomor_pendaftaran ? $calonSantriData->nomor_pendaftaran : '' }}
+                                </p>
                                 <p class="text-sm text-gray-500">Simpan nomor pendaftaran ini untuk keperluan selanjutnya
                                 </p>
                             </div>
@@ -1844,16 +1900,32 @@
                                     <div class="next-step-number">2</div>
                                     <div class="next-step-content">
                                         <div class="next-step-title">Grup WhatsApp</div>
-                                        <div class="next-step-description">Silakan masuk ke grup WhatsApp dan kirim data
-                                            yang telah tercantum di chat.</div>
-                                        <a href="#" id="whatsapp-link" class="whatsapp-btn mt-3 inline-flex items-center">
+                                        <div class="next-step-description">Silakan bergabung dengan grup WhatsApp santri
+                                            baru dan kirimkan data Anda.</div>
+
+                                        <!-- WhatsApp Group Link -->
+                                        <a href="https://chat.whatsapp.com/Dp5GNjCUmsxC6PWsw1bCDn" target="_blank"
+                                            id="whatsapp-link" class="whatsapp-btn mt-3 inline-flex items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path
                                                     d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                             </svg>
-                                            Hubungi via WhatsApp
+                                            Bergabung dengan Grup WhatsApp
                                         </a>
+
+                                        <!-- Message Template Section -->
+                                        <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-left">
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                                Setelah bergabung dengan grup, salin dan kirim pesan berikut:
+                                            </p>
+                                            <textarea id="whatsapp-message" class="w-full p-2 mb-2 text-sm border rounded"
+                                                rows="12" readonly></textarea>
+                                            <button id="copy-message-btn"
+                                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                                                Salin Pesan
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1868,10 +1940,17 @@
                             </div>
 
                             <div class="mt-8">
-                                <a href="/"
-                                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    Kembali ke Beranda
-                                </a>
+                                <!-- Find the section with the "Kembali ke Beranda" button and add this next to it -->
+                                <div class="mt-6 flex gap-4">
+                                    <a href="{{ route('home') }}"
+                                        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                                        Kembali ke Beranda
+                                    </a>
+                                    <a href="{{ route('pendaftaran.reset') }}"
+                                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                                        Pendaftaran Baru
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2016,9 +2095,12 @@
             });
 
             // Multi-step form functionality
-            let currentStep = 'formulir';
+            let currentStep = '{{ $currentStep ?? "formulir" }}';
             let calonSantriData = null;
-            let calonSantriId = null;
+            let calonSantriId = '{{ $calonSantriData->id ?? "" }}';
+
+            // Store the current step in localStorage and session
+            storeCurrentStep(currentStep);
 
             // Function to show a specific step
             function showStep(stepId) {
@@ -2048,6 +2130,19 @@
                 });
 
                 currentStep = stepId;
+
+                // Store the current step in localStorage
+                storeCurrentStep(currentStep);
+
+                // Update the server-side session via AJAX
+                fetch('/update-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ current_step: currentStep })
+                }).catch(error => console.error('Error updating session:', error));
 
                 // Scroll to the top of the form
                 document.getElementById('form-pendaftaran').scrollIntoView({ behavior: 'smooth' });
@@ -2115,13 +2210,21 @@
                             document.getElementById('checking-no-whatsapp').textContent = data.no_whatsapp;
                             document.getElementById('checking-asal-sekolah').textContent = data.asal_sekolah;
 
+                            // Update hidden input in checking form
+                            document.querySelector('input[name="calon_santri_id"]').value = data.id;
+
                             // Move to the next step
                             showStep('checking');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan saat mengirim formulir. Silakan coba lagi.');
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat mengirim formulir. Silakan coba lagi.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                     })
                     .finally(() => {
                         // Hide loading state
@@ -2135,14 +2238,18 @@
                 showStep('formulir');
             });
 
-            // Handle checking step submission
-            document.getElementById('submit-checking').addEventListener('click', function (e) {
-                // Prevent default form submission behavior
+            // Handle checking form submission
+            document.getElementById('checking-form').addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                // Check if the checkbox is checked
+                // Prevent default form submission behavior if checkbox is not checked
                 if (!document.getElementById('confirm-data').checked) {
-                    alert('Silakan konfirmasi bahwa data yang Anda masukkan sudah benar.');
+                    Swal.fire({
+                        title: 'Perhatian!',
+                        text: 'Silakan konfirmasi bahwa data yang Anda masukkan sudah benar.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
                     return;
                 }
 
@@ -2150,15 +2257,17 @@
                 document.getElementById('checking-submit-text').style.display = 'none';
                 document.getElementById('checking-loading').style.display = 'inline-block';
 
+                // Get form data
+                const formData = new FormData(this);
+
                 // Send AJAX request
                 fetch('/pendaftaran/checking', {
                     method: 'POST',
+                    body: formData,
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ calon_santri_id: calonSantriId })
+                    }
                 })
                     .then(response => {
                         if (!response.ok) {
@@ -2167,15 +2276,23 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Update the data
+                        // Update the calon santri data
                         calonSantriData = data;
+
+                        // Update hidden input in pembayaran form
+                        document.querySelector('#pembayaran-form input[name="calon_santri_id"]').value = data.id;
 
                         // Move to the next step
                         showStep('pembayaran');
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan saat verifikasi. Silakan coba lagi.');
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat memproses data. Silakan coba lagi.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                     })
                     .finally(() => {
                         // Hide loading state
@@ -2229,12 +2346,12 @@
                 document.getElementById('pembayaran-loading').style.display = 'inline-block';
 
                 // Clear previous errors
-                document.getElementById('error-payment_proof').textContent = '';
-                document.getElementById('error-payment_type').textContent = '';
+                document.querySelectorAll('.form-error').forEach(error => {
+                    error.textContent = '';
+                });
 
                 // Get form data
                 const formData = new FormData(this);
-                formData.append('calon_santri_id', calonSantriId);
 
                 // Send AJAX request
                 fetch('/pendaftaran/pembayaran', {
@@ -2247,40 +2364,138 @@
                 })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            return response.json().then(data => {
+                                throw new Error(data.error || 'Network response was not ok');
+                            });
                         }
                         return response.json();
                     })
                     .then(data => {
-                        if (data.errors) {
-                            // Display validation errors
-                            if (data.errors.payment_proof) {
-                                document.getElementById('error-payment_proof').textContent = data.errors.payment_proof[0];
-                            }
-                            if (data.errors.payment_type) {
-                                document.getElementById('error-payment_type').textContent = data.errors.payment_type[0];
-                            }
-                        } else {
-                            // Update the data
-                            calonSantriData = data;
+                        // Update the calon santri data
+                        calonSantriData = data;
 
-                            // Set the registration number
-                            const nomorPendaftaran = data.nomor_pendaftaran || `PSB-${calonSantriId.toString().padStart(4, '0')}`;
-                            document.getElementById('nomor-pendaftaran').textContent = nomorPendaftaran;
-
-                            // Set WhatsApp link with data
-                            const whatsappLink = document.getElementById('whatsapp-link');
-                            const nama = encodeURIComponent(calonSantriData.nama);
-                            const nomorPendaftaranEncoded = encodeURIComponent(nomorPendaftaran);
-                            whatsappLink.href = `https://wa.me/6281234567890?text=Assalamualaikum,%20saya%20${nama}%20dengan%20nomor%20pendaftaran%20${nomorPendaftaranEncoded}%20ingin%20bergabung%20dengan%20grup%20WhatsApp%20santri%20baru.`;
-
-                            // Move to the next step
-                            showStep('berhasil');
+                        // Update registration number in success step
+                        const nomorPendaftaranElement = document.getElementById('nomor-pendaftaran');
+                        if (nomorPendaftaranElement) {
+                            nomorPendaftaranElement.textContent = data.nomor_pendaftaran;
                         }
+
+                        // REMOVE THE FOLLOWING SECTION ENTIRELY as it's creating duplicates:
+                        // Update WhatsApp link with data
+                        // const whatsappLink = document.getElementById('whatsapp-link');
+                        // if (whatsappLink) {
+                        //     // Set the link to just the group invite
+                        //     whatsappLink.href = "https://chat.whatsapp.com/Dp5GNjCUmsxC6PWsw1bCDn";
+
+                        //     // Create a copy button and text area for the message
+                        //     const messageContainer = document.createElement('div');
+                        //     messageContainer.className = 'mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg';
+
+                        //     // Format the message with all user data
+                        //     const messageText = `Assalamualaikum, saya ingin bergabung dengan grup WhatsApp santri baru.
+
+                        // Nomor Urut: ${data.nomor_pendaftaran || ''}
+                        // Nama: ${data.nama || ''}
+                        // Tempat Lahir: ${data.tempat_lahir || ''}
+                        // Tanggal Lahir: ${data.tanggal_lahir || ''}
+                        // Alamat: ${data.alamat || ''}
+                        // Nama ayah: ${data.nama_ayah || ''}
+                        // Nama ibu: ${data.nama_ibu || ''}
+                        // No whatsapp: ${data.no_whatsapp || ''}
+                        // Asal sekolah: ${data.asal_sekolah || ''}
+                        // Jenis kelamin: ${data.jenis_kelamin || ''}`;
+
+                        //     // Create textarea with the message
+                        //     const textarea = document.createElement('textarea');
+                        //     textarea.className = 'w-full p-2 mb-2 text-sm border rounded';
+                        //     textarea.rows = 12;
+                        //     textarea.readOnly = true;
+                        //     textarea.value = messageText;
+
+                        //     // Create copy button
+                        //     const copyButton = document.createElement('button');
+                        //     copyButton.className = 'bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded';
+                        //     copyButton.textContent = 'Salin Pesan';
+                        //     copyButton.onclick = function () {
+                        //         textarea.select();
+                        //         document.execCommand('copy');
+                        //         this.textContent = 'Tersalin!';
+                        //         setTimeout(() => {
+                        //             this.textContent = 'Salin Pesan';
+                        //         }, 2000);
+                        //     };
+
+                        //     // Add instructions
+                        //     const instructions = document.createElement('p');
+                        //     instructions.className = 'text-sm text-gray-600 dark:text-gray-400 mb-2';
+                        //     instructions.textContent = 'Setelah bergabung dengan grup, salin dan kirim pesan berikut:';
+
+                        //     // Assemble the container
+                        //     messageContainer.appendChild(instructions);
+                        //     messageContainer.appendChild(textarea);
+                        //     messageContainer.appendChild(copyButton);
+
+                        //     // Insert the container after the WhatsApp link
+                        //     whatsappLink.parentNode.insertBefore(messageContainer, whatsappLink.nextSibling);
+
+                        //     // Update the WhatsApp link text
+                        //     whatsappLink.textContent = 'Bergabung dengan Grup WhatsApp';
+                        // }
+
+                        // Replace the above code with just this update to the existing textarea:
+                        // Update the WhatsApp message in the textarea directly
+                        const whatsappMessageTextarea = document.getElementById('whatsapp-message');
+                        if (whatsappMessageTextarea) {
+                            whatsappMessageTextarea.value = `Assalamualaikum, saya ingin bergabung dengan grup WhatsApp santri baru.
+
+    Nomor Urut: ${data.nomor_pendaftaran || ''}
+    Nama: ${data.nama || ''}
+    Tempat Lahir: ${data.tempat_lahir || ''}
+    Tanggal Lahir: ${data.tanggal_lahir || ''}
+    Alamat: ${data.alamat || ''}
+    Nama ayah: ${data.nama_ayah || ''}
+    Nama ibu: ${data.nama_ibu || ''}
+    No whatsapp: ${data.no_whatsapp || ''}
+    Asal sekolah: ${data.asal_sekolah || ''}
+    Jenis kelamin: ${data.jenis_kelamin || ''}`;
+                        }
+
+                        // Move to the next step
+                        showStep('berhasil');
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan saat mengunggah bukti pembayaran. Silakan coba lagi.');
+
+                        if (error.message && error.message.includes('validation')) {
+                            // Handle validation errors
+                            try {
+                                const errorData = JSON.parse(error.message);
+                                if (errorData.errors) {
+                                    Object.keys(errorData.errors).forEach(field => {
+                                        const errorElement = document.getElementById(`error-${field}`);
+                                        if (errorElement) {
+                                            errorElement.textContent = errorData.errors[field][0];
+                                        }
+                                    });
+                                }
+                            } catch (e) {
+                                // If parsing fails, show generic error
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        } else {
+                            // Show generic error message
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
                     })
                     .finally(() => {
                         // Hide loading state
@@ -2288,6 +2503,17 @@
                         document.getElementById('pembayaran-loading').style.display = 'none';
                     });
             });
+
+            // Set WhatsApp link with data if on success step
+            if (currentStep === 'berhasil' && calonSantriId) {
+                const whatsappLink = document.getElementById('whatsapp-link');
+                if (whatsappLink) {
+                    const nama = encodeURIComponent(document.getElementById('checking-nama')?.textContent || '');
+                    const nomorPendaftaranEncoded = encodeURIComponent(document.getElementById('nomor-pendaftaran')?.textContent || '');
+                    whatsappLink.href = `https://chat.whatsapp.com/Dp5GNjCUmsxC6PWsw1bCDn?text=Assalamualaikum,%20saya%20${nama}%20dengan%20nomor%20pendaftaran%20${nomorPendaftaranEncoded}%20ingin%20bergabung%20dengan%20grup%20WhatsApp%20santri%20baru.`;
+                }
+            }
+
             // Track form submission
             const trackForm = document.getElementById('track-form');
             if (trackForm) {
@@ -2295,7 +2521,7 @@
                     e.preventDefault();
 
                     const formData = new FormData(this);
-                    const registrationNumber = formData.get('registration_number');
+                    const nomorPendaftaran = formData.get('nomor_pendaftaran');
 
                     // Show loading state
                     const submitButton = this.querySelector('button[type="submit"]');
@@ -2324,14 +2550,14 @@
                             if (data.error) {
                                 // Show error message
                                 document.getElementById('track-content').innerHTML = `
-                                    <div class="text-center py-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nomor Pendaftaran Tidak Ditemukan</h4>
-                                        <p class="text-gray-600 dark:text-gray-400">Pastikan nomor pendaftaran yang Anda masukkan sudah benar.</p>
-                                    </div>
-                                `;
+                                                            <div class="text-center py-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                                <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Nomor Pendaftaran Tidak Ditemukan</h4>
+                                                                <p class="text-gray-600 dark:text-gray-400">Pastikan nomor pendaftaran yang Anda masukkan sudah benar.</p>
+                                                            </div>
+                                                        `;
                             } else {
                                 // Show success message with data
                                 let statusBadge = '';
@@ -2361,20 +2587,20 @@
                                 let paymentHistoryHTML = '';
                                 if (data.payment_history && data.payment_history.length > 0) {
                                     paymentHistoryHTML = `
-                                        <div class="mt-4">
-                                            <h5 class="font-medium text-gray-900 dark:text-white mb-2">Riwayat Pembayaran:</h5>
-                                            <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                                    <thead class="bg-gray-50 dark:bg-gray-800">
-                                                        <tr>
-                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cicilan</th>
-                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tanggal</th>
-                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Jumlah</th>
-                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    `;
+                                                                                        <div class="mt-4">
+                                                                                            <h5 class="font-medium text-gray-900 dark:text-white mb-2">Riwayat Pembayaran:</h5>
+                                                                                            <div class="overflow-x-auto">
+                                                                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                                                                                    <thead class="bg-gray-50 dark:bg-gray-800">
+                                                                                                        <tr>
+                                                                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cicilan</th>
+                                                                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tanggal</th>
+                                                                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Jumlah</th>
+                                                                                                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                                                                    `;
 
                                     data.payment_history.forEach(payment => {
                                         const paymentStatus = payment.status === 'verified'
@@ -2382,160 +2608,160 @@
                                             : '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">Menunggu Verifikasi</span>';
 
                                         paymentHistoryHTML += `
-                                            <tr>
-                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">${payment.installment_number || 'Pertama'}</td>
-                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">${payment.payment_date}</td>
-                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">Rp ${payment.amount}</td>
-                                                <td class="px-3 py-2 whitespace-nowrap text-sm">${paymentStatus}</td>
-                                            </tr>
-                                        `;
+                                                                                            <tr>
+                                                                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">${payment.installment_number || 'Pertama'}</td>
+                                                                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">${payment.payment_date}</td>
+                                                                                                <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">Rp ${payment.amount}</td>
+                                                                                                <td class="px-3 py-2 whitespace-nowrap text-sm">${paymentStatus}</td>
+                                                                                            </tr>
+                                                                                        `;
                                     });
 
                                     paymentHistoryHTML += `
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    `;
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    `;
                                 }
 
                                 // Upload form for installment payments (only show for Cicilan payment type)
                                 let uploadFormHTML = '';
                                 if (data.payment_type === 'Cicilan' && data.remaining_amount !== 'Rp 0') {
                                     uploadFormHTML = `
-                                        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                            <h5 class="font-medium text-gray-900 dark:text-white mb-4">Unggah Bukti Pembayaran Cicilan Berikutnya</h5>
+                                                                                        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                                                                            <h5 class="font-medium text-gray-900 dark:text-white mb-4">Unggah Bukti Pembayaran Cicilan Berikutnya</h5>
 
-                                            <form id="upload-installment-form" action="/pendaftaran/upload-installment" method="POST" enctype="multipart/form-data">
-                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
-                                                <input type="hidden" name="registration_number" value="${data.registration_number}">
+                                                                                            <form id="upload-installment-form" action="/pendaftaran/upload-installment" method="POST" enctype="multipart/form-data">
+                                                                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                                                                                                <input type="hidden" name="nomor_pendaftaran" value="${data.nomor_pendaftaran}">
 
-                                                <div class="space-y-4">
-                                                    <div>
-                                                        <label for="installment_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah Pembayaran</label>
-                                                        <div class="relative">
-                                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                                <span class="text-gray-500 dark:text-gray-400">Rp</span>
-                                                            </div>
-                                                            <input type="number" name="installment_amount" id="installment_amount" required
-                                                                class="pl-10 w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
-                                                                placeholder="Masukkan jumlah pembayaran">
-                                                        </div>
-                                                    </div>
+                                                                                                <div class="space-y-4">
+                                                                                                    <div>
+                                                                                                        <label for="installment_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah Pembayaran</label>
+                                                                                                        <div class="relative">
+                                                                                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                                                                <span class="text-gray-500 dark:text-gray-400">Rp</span>
+                                                                                                            </div>
+                                                                                                            <input type="number" name="installment_amount" id="installment_amount" required
+                                                                                                                class="pl-10 w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
+                                                                                                                placeholder="Masukkan jumlah pembayaran">
+                                                                                                        </div>
+                                                                                                    </div>
 
-                                                    <div>
-                                                        <label for="installment_proof" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bukti Pembayaran</label>
-                                                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg">
-                                                            <div class="space-y-1 text-center">
-                                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                </svg>
-                                                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                                                                    <label for="installment_proof" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
-                                                                        <span>Unggah file</span>
-                                                                        <input id="installment_proof" name="installment_proof" type="file" class="sr-only" accept="image/*" required>
-                                                                    </label>
-                                                                    <p class="pl-1">atau seret dan lepas</p>
-                                                                </div>
-                                                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                                    PNG, JPG, JPEG hingga 5MB
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div id="preview-container" class="mt-2 hidden">
-                                                            <img id="preview-image" src="#" alt="Preview" class="max-h-40 rounded-lg mx-auto">
-                                                        </div>
-                                                    </div>
+                                                                                                    <div>
+                                                                                                        <label for="installment_proof" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bukti Pembayaran</label>
+                                                                                                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg">
+                                                                                                            <div class="space-y-1 text-center">
+                                                                                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                                                </svg>
+                                                                                                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                                                                                                    <label for="installment_proof" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                                                                                                        <span>Unggah file</span>
+                                                                                                                        <input id="installment_proof" name="installment_proof" type="file" class="sr-only" accept="image/*" required>
+                                                                                                                    </label>
+                                                                                                                    <p class="pl-1">atau seret dan lepas</p>
+                                                                                                                </div>
+                                                                                                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                                                                                    PNG, JPG, JPEG hingga 5MB
+                                                                                                                </p>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div id="preview-container" class="mt-2 hidden">
+                                                                                                            <img id="preview-image" src="#" alt="Preview" class="max-h-40 rounded-lg mx-auto">
+                                                                                                        </div>
+                                                                                                    </div>
 
-                                                    <div>
-                                                        <label for="installment_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Pembayaran</label>
-                                                        <input type="date" name="installment_date" id="installment_date" required
-                                                            class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
-                                                            value="${new Date().toISOString().split('T')[0]}">
-                                                    </div>
+                                                                                                    <div>
+                                                                                                        <label for="installment_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Pembayaran</label>
+                                                                                                        <input type="date" name="installment_date" id="installment_date" required
+                                                                                                            class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
+                                                                                                            value="${new Date().toISOString().split('T')[0]}">
+                                                                                                    </div>
 
-                                                    <div>
-                                                        <label for="installment_notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan (Opsional)</label>
-                                                        <textarea name="installment_notes" id="installment_notes" rows="2"
-                                                            class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
-                                                            placeholder="Tambahkan catatan jika diperlukan"></textarea>
-                                                    </div>
+                                                                                                    <div>
+                                                                                                        <label for="installment_notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan (Opsional)</label>
+                                                                                                        <textarea name="installment_notes" id="installment_notes" rows="2"
+                                                                                                            class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 px-4 text-base shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
+                                                                                                            placeholder="Tambahkan catatan jika diperlukan"></textarea>
+                                                                                                    </div>
 
-                                                    <div class="pt-2">
-                                                        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" />
-                                                            </svg>
-                                                            Unggah Bukti Pembayaran
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    `;
+                                                                                                    <div class="pt-2">
+                                                                                                        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" />
+                                                                                                            </svg>
+                                                                                                            Unggah Bukti Pembayaran
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    `;
                                 }
 
                                 // Render the content
                                 document.getElementById('track-content').innerHTML = `
-                                    <div class="text-center mb-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Informasi Ditemukan</h4>
-                                    </div>
+                                                                                    <div class="text-center mb-4">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                        </svg>
+                                                                                        <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Informasi Ditemukan</h4>
+                                                                                    </div>
 
-                                    <div class="space-y-4">
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">Nama:</p>
-                                                <p class="font-medium text-gray-900 dark:text-white">${data.nama}</p>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">No. Pendaftaran:</p>
-                                                <p class="font-medium text-gray-900 dark:text-white">${data.registration_number}</p>
-                                            </div>
-                                        </div>
+                                                                                    <div class="space-y-4">
+                                                                                        <div class="grid grid-cols-2 gap-4">
+                                                                                            <div>
+                                                                                                <p class="text-sm text-gray-500 dark:text-gray-400">Nama:</p>
+                                                                                                <p class="font-medium text-gray-900 dark:text-white">${data.nama}</p>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <p class="text-sm text-gray-500 dark:text-gray-400">No. Pendaftaran:</p>
+                                                                                                <p class="font-medium text-gray-900 dark:text-white">${data.nomor_pendaftaran}</p>
+                                                                                            </div>
+                                                                                        </div>
 
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">Status:</p>
-                                                <div class="mt-1">${statusBadge}</div>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">Jenis Pembayaran:</p>
-                                                <div class="mt-1">${paymentTypeBadge}</div>
-                                            </div>
-                                        </div>
+                                                                                        <div class="grid grid-cols-2 gap-4">
+                                                                                            <div>
+                                                                                                <p class="text-sm text-gray-500 dark:text-gray-400">Status:</p>
+                                                                                                <div class="mt-1">${statusBadge}</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <p class="text-sm text-gray-500 dark:text-gray-400">Jenis Pembayaran:</p>
+                                                                                                <div class="mt-1">${paymentTypeBadge}</div>
+                                                                                            </div>
+                                                                                        </div>
 
-                                        ${data.payment_type === 'Cicilan' ? `
-                                            <div class="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Dibayarkan:</p>
-                                                    <p class="font-medium text-gray-900 dark:text-white">Rp ${data.total_paid}</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm text-gray-500 dark:text-gray-400">Sisa Pembayaran:</p>
-                                                    <p class="font-medium text-gray-900 dark:text-white">Rp ${data.remaining_amount}</p>
-                                                </div>
-                                            </div>
-                                        ` : ''}
+                                                                                        ${data.payment_type === 'Cicilan' ? `
+                                                                                            <div class="grid grid-cols-2 gap-4">
+                                                                                                <div>
+                                                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Dibayarkan:</p>
+                                                                                                    <p class="font-medium text-gray-900 dark:text-white">Rp ${data.total_paid}</p>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">Sisa Pembayaran:</p>
+                                                                                                    <p class="font-medium text-gray-900 dark:text-white">Rp ${data.remaining_amount}</p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        ` : ''}
 
-                                        ${paymentHistoryHTML}
-                                        ${uploadFormHTML}
+                                                                                        ${paymentHistoryHTML}
+                                                                                        ${uploadFormHTML}
 
-                                        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                Untuk informasi lebih lanjut, silakan hubungi admin melalui WhatsApp:
-                                            </p>
-                                            <a href="https://wa.me/6281234567890" target="_blank" class="mt-2 inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-                                                </svg>
-                                                Hubungi Admin
-                                            </a>
-                                        </div>
-                                    </div>
-                                `;
+                                                                                        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                                                                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                                                                Untuk informasi lebih lanjut, silakan hubungi admin melalui WhatsApp:
+                                                                                            </p>
+                                                                                            <a href="https://wa.me/6281234567890" target="_blank" class="mt-2 inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                                                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                                                                                                </svg>
+                                                                                                Hubungi Admin
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                `;
 
                                 // Add event listener for file preview
                                 const fileInput = document.getElementById('installment_proof');
@@ -2627,17 +2853,90 @@
                             // Show error message
                             document.getElementById('track-results').style.display = 'block';
                             document.getElementById('track-content').innerHTML = `
-                                <div class="text-center py-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Terjadi Kesalahan</h4>
-                                    <p class="text-gray-600 dark:text-gray-400">Silakan coba lagi nanti.</p>
-                                </div>
-                            `;
+                                                                                <div class="text-center py-4">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                                    </svg>
+                                                                                    <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Terjadi Kesalahan</h4>
+                                                                                    <p class="text-gray-600 dark:text-gray-400">Silakan coba lagi nanti.</p>
+                                                                                </div>
+                                                                            `;
                         });
                 });
             }
+
+            // Add route for updating session
+            function updateSession(data) {
+                return fetch('/update-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(data)
+                }).catch(error => console.error('Error updating session:', error));
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 3. Remove the getLast4Digits function as it's not needed anymore (around line 3110-3118)
+            // function getLast4Digits(number) {
+            //     if (!number) return '';
+
+            //     // Convert to string and remove any non-numeric characters
+            //     const numStr = String(number).replace(/\D/g, '');
+
+            //     // Return last 4 digits or the entire number if less than 4 digits
+            //     return numStr.length > 4 ? numStr.slice(-4) : numStr;
+            // }
+            // Function to populate the WhatsApp message with user data
+            function populateWhatsAppMessage(data) {
+                // Use the full registration number
+                const messageText = `Assalamualaikum, saya ingin bergabung dengan grup WhatsApp santri baru.
+
+    Nomor Urut: ${data.nomor_pendaftaran || ''}
+    Nama: ${data.nama || ''}
+    Tempat Lahir: ${data.tempat_lahir || ''}
+    Tanggal Lahir: ${data.tanggal_lahir || ''}
+    Alamat: ${data.alamat || ''}
+    Nama ayah: ${data.nama_ayah || ''}
+    Nama ibu: ${data.nama_ibu || ''}
+    No whatsapp: ${data.no_whatsapp || ''}
+    Asal sekolah: ${data.asal_sekolah || ''}
+    Jenis kelamin: ${data.jenis_kelamin || ''}`;
+
+                document.getElementById('whatsapp-message').value = messageText;
+            }
+
+            // Copy button functionality
+            document.getElementById('copy-message-btn').addEventListener('click', function () {
+                const textarea = document.getElementById('whatsapp-message');
+                textarea.select();
+                document.execCommand('copy');
+                this.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    this.textContent = 'Salin Pesan';
+                }, 2000);
+            });
+
+            // Call this function when data is available
+            // If you're loading data via AJAX, call this in your success callback
+            // For now, we'll use any existing data or placeholder
+            const existingData = {
+                nomor_pendaftaran: document.getElementById('nomor-pendaftaran').textContent.trim(),
+                // You'll need to populate these with actual data from your application
+                nama: '{{ isset($calonSantriData) ? $calonSantriData->nama : "" }}',
+                tempat_lahir: '{{ isset($calonSantriData) ? $calonSantriData->tempat_lahir : "" }}',
+                tanggal_lahir: '{{ isset($calonSantriData) ? $calonSantriData->tanggal_lahir : "" }}',
+                alamat: '{{ isset($calonSantriData) ? $calonSantriData->alamat : "" }}',
+                nama_ayah: '{{ isset($calonSantriData) ? $calonSantriData->nama_ayah : "" }}',
+                nama_ibu: '{{ isset($calonSantriData) ? $calonSantriData->nama_ibu : "" }}',
+                no_whatsapp: '{{ isset($calonSantriData) ? $calonSantriData->no_whatsapp : "" }}',
+                asal_sekolah: '{{ isset($calonSantriData) ? $calonSantriData->asal_sekolah : "" }}',
+                jenis_kelamin: '{{ isset($calonSantriData) ? $calonSantriData->jenis_kelamin : "" }}'
+            };
+
+            populateWhatsAppMessage(existingData);
         });
     </script>
 @endsection

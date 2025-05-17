@@ -447,7 +447,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="kelas"
                                     class="block text-sm font-medium text-slate-700 dark:text-slate-300">Class</label>
                                 <select id="kelas" name="kelas"
@@ -459,7 +459,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Active filters -->

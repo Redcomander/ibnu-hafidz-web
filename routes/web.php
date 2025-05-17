@@ -4,6 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PendaftaranController;
@@ -15,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/api/visitor-stats', [DashboardController::class, 'getVisitorStats']);
+Route::get('/api/active-visitors', [DashboardController::class, 'getActiveVisitors']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -58,11 +59,14 @@ Route::get('/pendaftaran', [PendaftaranController::class, 'halamandepan'])->name
 Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 Route::post('/pendaftaran/checking', [PendaftaranController::class, 'checking'])->name('pendaftaran.checking');
 Route::post('/pendaftaran/pembayaran', [PendaftaranController::class, 'pembayaran'])->name('pendaftaran.pembayaran');
+Route::get('/pendaftaran/pembayaran', [PendaftaranController::class, 'showPembayaran'])->name('pendaftaran.showPembayaran');
 Route::get('/pendaftaran/berhasil', [PendaftaranController::class, 'berhasil'])->name('pendaftaran.berhasil');
 Route::get('/pendaftaran/{calonSantri}/download-payment-proof', [PendaftaranController::class, 'downloadPaymentProof'])->name('pendaftaran.downloadPaymentProof');
 Route::post('/pendaftaran/track', [PendaftaranController::class, 'trackPendaftaran'])->name('pendaftaran.track');
 Route::post('/pendaftaran/uploadInstallment/{calonSantri}', [PendaftaranController::class, 'uploadInstallment'])->name('pendaftaran.uploadInstallment');
 Route::post('/pendaftaran/upload-installment', [PendaftaranController::class, 'uploadInstallmentPublic'])->name('pendaftaran.uploadInstallmentPublic');
+Route::post('/update-session', [PendaftaranController::class, 'updateSession'])->name('update.session');
+Route::get('/pendaftaran/reset', [PendaftaranController::class, 'resetPendaftaran'])->name('pendaftaran.reset');
 
 //Gallery Route
 Route::get('/gallery/video', [GalleryController::class, 'galleryVideo'])->name('gallery.videos');

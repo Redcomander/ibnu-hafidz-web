@@ -666,128 +666,171 @@
                     <h3 class="text-2xl font-bold mb-6 text-gray-800">Ekstrakurikuler Unggulan</h3>
                     <ul class="space-y-4">
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Muhadharah (Public Speaking)</span>
-                                <p class="text-gray-600 text-sm mt-1">Latihan pidato dalam tiga bahasa (Indonesia, Arab, Inggris) untuk mempersiapkan santri menjadi da'i masa depan</p>
+                                <p class="text-gray-600 text-sm mt-1">Latihan pidato dalam tiga bahasa (Indonesia, Arab,
+                                    Inggris) untuk mempersiapkan santri menjadi da'i masa depan</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Pencak Silat</span>
-                                <p class="text-gray-600 text-sm mt-1">Seni bela diri tradisional untuk melatih kedisiplinan, ketangkasan, dan ketahanan fisik santri</p>
+                                <p class="text-gray-600 text-sm mt-1">Seni bela diri tradisional untuk melatih kedisiplinan,
+                                    ketangkasan, dan ketahanan fisik santri</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Karate</span>
-                                <p class="text-gray-600 text-sm mt-1">Bela diri dari Jepang yang mengajarkan disiplin, fokus, dan teknik pertahanan diri</p>
+                                <p class="text-gray-600 text-sm mt-1">Bela diri dari Jepang yang mengajarkan disiplin,
+                                    fokus, dan teknik pertahanan diri</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Boxing</span>
-                                <p class="text-gray-600 text-sm mt-1">Olahraga tinju untuk melatih kekuatan, ketahanan, dan strategi dalam pertandingan</p>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga tinju untuk melatih kekuatan, ketahanan, dan
+                                    strategi dalam pertandingan</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Tricking</span>
-                                <p class="text-gray-600 text-sm mt-1">Kombinasi gerakan akrobatik seperti parkour yang mengembangkan kelenturan dan keberanian santri</p>
+                                <p class="text-gray-600 text-sm mt-1">Kombinasi gerakan akrobatik seperti parkour yang
+                                    mengembangkan kelenturan dan keberanian santri</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Bulu Tangkis</span>
-                                <p class="text-gray-600 text-sm mt-1">Olahraga raket yang melatih kelincahan, refleks, dan koordinasi mata-tangan</p>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga raket yang melatih kelincahan, refleks, dan
+                                    koordinasi mata-tangan</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Hadroh</span>
-                                <p class="text-gray-600 text-sm mt-1">Seni musik islami dengan rebana yang mengembangkan keterampilan musikal dan melestarikan tradisi</p>
+                                <p class="text-gray-600 text-sm mt-1">Seni musik islami dengan rebana yang mengembangkan
+                                    keterampilan musikal dan melestarikan tradisi</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Qori'</span>
-                                <p class="text-gray-600 text-sm mt-1">Pelatihan seni baca Al-Qur'an dengan tajwid dan irama yang indah</p>
+                                <p class="text-gray-600 text-sm mt-1">Pelatihan seni baca Al-Qur'an dengan tajwid dan irama
+                                    yang indah</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Futsal</span>
-                                <p class="text-gray-600 text-sm mt-1">Olahraga tim yang mengembangkan kerja sama, strategi, dan kebugaran fisik</p>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga tim yang mengembangkan kerja sama, strategi,
+                                    dan kebugaran fisik</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Voli</span>
-                                <p class="text-gray-600 text-sm mt-1">Olahraga bola voli yang melatih koordinasi, kerjasama tim, dan kemampuan motorik</p>
+                                <p class="text-gray-600 text-sm mt-1">Olahraga bola voli yang melatih koordinasi, kerjasama
+                                    tim, dan kemampuan motorik</p>
                             </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
                                 <span class="text-gray-800 font-medium">Jurnalistik & Media</span>
-                                <p class="text-gray-600 text-sm mt-1">Pelatihan penulisan, fotografi, dan produksi konten digital untuk mengembangkan keterampilan komunikasi</p>
+                                <p class="text-gray-600 text-sm mt-1">Pelatihan penulisan, fotografi, dan produksi konten
+                                    digital untuk mengembangkan keterampilan komunikasi</p>
                             </div>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </div>

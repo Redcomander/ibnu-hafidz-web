@@ -17,10 +17,13 @@
             </div>
 
             @if ($errors->any())
-                <div class="bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4 mb-6 rounded-lg">
+                <div
+                    class="bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4 mb-6 rounded-lg">
                     <div class="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 mt-0.5 flex-shrink-0" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
                             <p class="font-medium text-base">Terjadi kesalahan:</p>
@@ -44,8 +47,7 @@
                         <div class="flex flex-col">
                             <h3 class="text-xl font-medium text-gray-800 dark:text-white">Informasi Pendaftar</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                No. Pendaftaran: <span
-                                    class="font-medium">{{ $calonSantri->registration_number ?? 'REG-' . str_pad($calonSantri->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                No. Pendaftaran: <span class="font-medium">{{ $calonSantri->nomor_pendaftaran }}</span>
                             </p>
                         </div>
                         <div class="flex flex-col items-end gap-3">
@@ -76,11 +78,13 @@
                             @if($calonSantri->payment_type)
                                 <div class="flex gap-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" name="payment_type" value="Lunas" class="form-radio h-5 w-5 text-green-600 border-2" {{ $calonSantri->payment_type == 'Lunas' ? 'checked' : '' }}>
+                                        <input type="radio" name="payment_type" value="Lunas"
+                                            class="form-radio h-5 w-5 text-green-600 border-2" {{ $calonSantri->payment_type == 'Lunas' ? 'checked' : '' }}>
                                         <span class="ml-2 text-base text-gray-700 dark:text-gray-300">Lunas</span>
                                     </label>
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" name="payment_type" value="Cicilan" class="form-radio h-5 w-5 text-orange-600 border-2" {{ $calonSantri->payment_type == 'Cicilan' ? 'checked' : '' }}>
+                                        <input type="radio" name="payment_type" value="Cicilan"
+                                            class="form-radio h-5 w-5 text-orange-600 border-2" {{ $calonSantri->payment_type == 'Cicilan' ? 'checked' : '' }}>
                                         <span class="ml-2 text-base text-gray-700 dark:text-gray-300">Cicilan</span>
                                     </label>
                                 </div>
@@ -90,61 +94,90 @@
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
-                                <h4 class="text-lg font-semibold mb-5 text-gray-800 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Data Pribadi</h4>
+                                <h4
+                                    class="text-lg font-semibold mb-5 text-gray-800 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">
+                                    Data Pribadi</h4>
                                 <div class="space-y-5">
                                     <div>
-                                        <label for="nama" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Lengkap</label>
-                                        <input type="text" name="nama" id="nama" value="{{ old('nama', $calonSantri->nama) }}"
+                                        <label for="nama"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama
+                                            Lengkap</label>
+                                        <input type="text" name="nama" id="nama"
+                                            value="{{ old('nama', $calonSantri->nama) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                     <div>
-                                        <label for="tempat_lahir" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Tempat Lahir</label>
-                                        <input type="text" name="tempat_lahir" id="tempat_lahir" value="{{ old('tempat_lahir', $calonSantri->tempat_lahir) }}"
+                                        <label for="tempat_lahir"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Tempat
+                                            Lahir</label>
+                                        <input type="text" name="tempat_lahir" id="tempat_lahir"
+                                            value="{{ old('tempat_lahir', $calonSantri->tempat_lahir) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                     <div>
-                                        <label for="tanggal_lahir" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Tanggal Lahir</label>
+                                        <label for="tanggal_lahir"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Tanggal
+                                            Lahir</label>
                                         <input type="date" name="tanggal_lahir" id="tanggal_lahir"
                                             value="{{ old('tanggal_lahir', $calonSantri->tanggal_lahir ? \Carbon\Carbon::parse($calonSantri->tanggal_lahir)->format('Y-m-d') : '') }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                     <div>
-                                        <label for="jenis_kelamin" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Jenis Kelamin</label>
+                                        <label for="jenis_kelamin"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Jenis
+                                            Kelamin</label>
                                         <select name="jenis_kelamin" id="jenis_kelamin"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                            <option value="Laki-laki" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                                            <option value="Perempuan" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                            <option value="Laki-laki" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki
+                                            </option>
+                                            <option value="Perempuan" {{ old('jenis_kelamin', $calonSantri->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan
+                                            </option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="alamat" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Alamat</label>
+                                        <label for="alamat"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Alamat</label>
                                         <textarea name="alamat" id="alamat" rows="4"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">{{ old('alamat', $calonSantri->alamat) }}</textarea>
                                     </div>
                                     <div>
-                                        <label for="asal_sekolah" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Asal Sekolah</label>
-                                        <input type="text" name="asal_sekolah" id="asal_sekolah" value="{{ old('asal_sekolah', $calonSantri->asal_sekolah) }}"
+                                        <label for="asal_sekolah"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Asal
+                                            Sekolah</label>
+                                        <input type="text" name="asal_sekolah" id="asal_sekolah"
+                                            value="{{ old('asal_sekolah', $calonSantri->asal_sekolah) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold mb-5 text-gray-800 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Data Orang Tua & Kontak</h4>
+                                <h4
+                                    class="text-lg font-semibold mb-5 text-gray-800 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">
+                                    Data Orang Tua & Kontak</h4>
                                 <div class="space-y-5">
                                     <div>
-                                        <label for="nama_ayah" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Ayah</label>
-                                        <input type="text" name="nama_ayah" id="nama_ayah" value="{{ old('nama_ayah', $calonSantri->nama_ayah) }}"
+                                        <label for="nama_ayah"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama
+                                            Ayah</label>
+                                        <input type="text" name="nama_ayah" id="nama_ayah"
+                                            value="{{ old('nama_ayah', $calonSantri->nama_ayah) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                     <div>
-                                        <label for="nama_ibu" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Ibu</label>
-                                        <input type="text" name="nama_ibu" id="nama_ibu" value="{{ old('nama_ibu', $calonSantri->nama_ibu) }}"
+                                        <label for="nama_ibu"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama
+                                            Ibu</label>
+                                        <input type="text" name="nama_ibu" id="nama_ibu"
+                                            value="{{ old('nama_ibu', $calonSantri->nama_ibu) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                     </div>
                                     <div>
-                                        <label for="no_whatsapp" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">No. WhatsApp</label>
+                                        <label for="no_whatsapp"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">No.
+                                            WhatsApp</label>
                                         <div class="flex items-center">
-                                            <input type="text" name="no_whatsapp" id="no_whatsapp" value="{{ old('no_whatsapp', $calonSantri->no_whatsapp) }}"
+                                            <input type="text" name="no_whatsapp" id="no_whatsapp"
+                                                value="{{ old('no_whatsapp', $calonSantri->no_whatsapp) }}"
                                                 class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                                             @php
                                                 // Format WhatsApp number for URL
@@ -168,19 +201,24 @@
                                     </div>
 
                                     <div>
-                                        <label for="status" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
+                                        <label for="status"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
                                         <select name="status" id="status"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                            <option value="formulir" {{ old('status', $calonSantri->status) == 'formulir' || old('status', $calonSantri->status) == 'Formulir' ? 'selected' : '' }}>Formulir</option>
-                                            <option value="checking" {{ old('status', $calonSantri->status) == 'checking' || old('status', $calonSantri->status) == 'Verifikasi' ? 'selected' : '' }}>Verifikasi</option>
-                                            <option value="pembayaran" {{ old('status', $calonSantri->status) == 'pembayaran' || old('status', $calonSantri->status) == 'Pembayaran' ? 'selected' : '' }}>Pembayaran</option>
+                                            <option value="formulir" {{ old('status', $calonSantri->status) == 'formulir' || old('status', $calonSantri->status) == 'Formulir' ? 'selected' : '' }}>
+                                                Formulir</option>
+                                            <option value="checking" {{ old('status', $calonSantri->status) == 'checking' || old('status', $calonSantri->status) == 'Verifikasi' ? 'selected' : '' }}>
+                                                Verifikasi</option>
+                                            <option value="pembayaran" {{ old('status', $calonSantri->status) == 'pembayaran' || old('status', $calonSantri->status) == 'Pembayaran' ? 'selected' : '' }}>
+                                                Pembayaran</option>
                                             <option value="berhasil" {{ old('status', $calonSantri->status) == 'berhasil' || old('status', $calonSantri->status) == 'Berhasil' || old('status', $calonSantri->status) == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                                         </select>
                                     </div>
 
                                     @if($calonSantri->verified_by_name)
                                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Diverifikasi Oleh</p>
+                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Diverifikasi Oleh
+                                            </p>
                                             <p class="text-base font-medium text-gray-900 dark:text-white mt-1">
                                                 {{ $calonSantri->verified_by_name }}
                                             </p>
@@ -188,20 +226,23 @@
                                     @endif
 
                                     <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
-                                        <label for="payment_proof" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Bukti Pembayaran</label>
+                                        <label for="payment_proof"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Bukti
+                                            Pembayaran</label>
                                         <div class="flex flex-col space-y-3">
                                             <input type="file" name="payment_proof" id="payment_proof" accept="image/*"
                                                 class="block w-full text-base text-gray-700 dark:text-gray-300
-                                                file:mr-4 file:py-2.5 file:px-4
-                                                file:rounded-md file:border-0
-                                                file:text-sm file:font-medium
-                                                file:bg-blue-50 file:text-blue-700
-                                                dark:file:bg-blue-900/20 dark:file:text-blue-300
-                                                hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30
-                                                cursor-pointer">
+                                                    file:mr-4 file:py-2.5 file:px-4
+                                                    file:rounded-md file:border-0
+                                                    file:text-sm file:font-medium
+                                                    file:bg-blue-50 file:text-blue-700
+                                                    dark:file:bg-blue-900/20 dark:file:text-blue-300
+                                                    hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30
+                                                    cursor-pointer">
 
                                             @if($calonSantri->payment_proof)
-                                                <a href="{{ route('pendaftaran.viewPaymentProof', $calonSantri->id) }}" target="_blank"
+                                                <a href="{{ route('pendaftaran.viewPaymentProof', $calonSantri->id) }}"
+                                                    target="_blank"
                                                     class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 font-medium flex items-center gap-2 bg-green-50 dark:bg-green-900/20 p-2 rounded-lg self-start">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -212,17 +253,22 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Kosongkan jika tidak ingin mengubah bukti pembayaran</p>
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Kosongkan jika tidak ingin
+                                            mengubah bukti pembayaran</p>
                                     </div>
 
                                     <div>
-                                        <label for="registration_number_display" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nomor Pendaftaran</label>
+                                        <label for="registration_number_display"
+                                            class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nomor
+                                            Pendaftaran</label>
                                         <input type="text" id="registration_number_display"
-                                            value="{{ $calonSantri->registration_number ?? 'REG-' . str_pad($calonSantri->id, 5, '0', STR_PAD_LEFT) }}"
+                                            value="{{ $calonSantri->nomor_pendaftaran ?? 'REG-' . str_pad($calonSantri->id, 5, '0', STR_PAD_LEFT) }}"
                                             class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-3 px-4 text-base shadow-sm bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
                                             disabled>
-                                        <input type="hidden" name="registration_number" value="{{ $calonSantri->registration_number ?? 'REG-' . str_pad($calonSantri->id, 5, '0', STR_PAD_LEFT) }}">
-                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Nomor pendaftaran tidak dapat diubah</p>
+                                        <input type="hidden" name="registration_number"
+                                            value="{{ $calonSantri->nomor_pendaftaran ?? 'REG-' . str_pad($calonSantri->id, 5, '0', STR_PAD_LEFT) }}">
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Nomor pendaftaran tidak
+                                            dapat diubah</p>
                                     </div>
                                 </div>
                             </div>

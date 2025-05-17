@@ -6,6 +6,7 @@ use App\Models\CalonSantri;
 use App\Models\PaymentInstallment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -50,9 +51,30 @@ class PendaftaranController extends Controller
     /**
      * Display the front-end registration page
      */
-    public function halamandepan()
+    /**
+     * Display the front-end registration page
+     */
+    public function halamandepan(Request $request)
     {
-        return view('pendaftarandepan');
+        // Get the current step from session or default to 'formulir'
+        $currentStep = Session::get('current_step', 'formulir');
+
+        // Get calon santri data from session if available
+        $calonSantriData = null;
+        $calonSantriId = Session::get('calon_santri_id');
+
+        if ($calonSantriId) {
+            $calonSantriData = CalonSantri::find($calonSantriId);
+
+            // If we have data but the user is on the formulir step,
+            // we should restore their progress to the appropriate step
+            if ($currentStep === 'formulir' && $calonSantriData) {
+                $currentStep = $calonSantriData->status;
+                Session::put('current_step', $currentStep);
+            }
+        }
+
+        return view('pendaftarandepan', compact('currentStep', 'calonSantriData'));
     }
 
     /**
@@ -109,7 +131,8 @@ class PendaftaranController extends Controller
             ]);
 
             // Store the calon santri ID in session to track progress
-            session(['calon_santri_id' => $calonSantri->id]);
+            Session::put('calon_santri_id', $calonSantri->id);
+            Session::put('current_step', 'checking');
 
             // Check if this is an AJAX request
             if ($request->ajax() || $request->wantsJson()) {
@@ -161,6 +184,9 @@ class PendaftaranController extends Controller
             // Update status
             $calonSantri->status = 'checking';
             $calonSantri->save();
+
+            // Update session
+            Session::put('current_step', 'pembayaran');
 
             // Check if this is an AJAX request
             if ($request->ajax() || $request->wantsJson()) {
@@ -224,6 +250,23 @@ class PendaftaranController extends Controller
             $calonSantri->payment_type = $request->payment_type;
             $calonSantri->save();
 
+            // If payment type is Cicilan, automatically create the first installment of Rp. 600,000
+            if ($request->payment_type === 'Cicilan') {
+                // Create new payment installment record for the registration fee
+                $installment = new PaymentInstallment();
+                $installment->calon_santri_id = $calonSantri->id;
+                $installment->installment_number = 1;
+                $installment->amount = 1000000; // Rp. 1.000.000 for registration fee
+                $installment->payment_date = now();
+                $installment->payment_proof = $calonSantri->payment_proof; // Use the same proof uploaded for registration
+                $installment->notes = 'Biaya pendaftaran awal';
+                $installment->status = 'pending'; // Set status to pending (unverified)
+                $installment->save();
+            }
+
+            // Update session
+            Session::put('current_step', 'berhasil');
+
             // Check if this is an AJAX request
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json($calonSantri);
@@ -255,7 +298,7 @@ class PendaftaranController extends Controller
      */
     public function berhasil()
     {
-        $calonSantriId = session('calon_santri_id');
+        $calonSantriId = Session::get('calon_santri_id');
         $calonSantri = CalonSantri::findOrFail($calonSantriId);
 
         return view('pendaftaran.berhasil', compact('calonSantri'));
@@ -400,26 +443,17 @@ class PendaftaranController extends Controller
     public function trackPendaftaran(Request $request)
     {
         $request->validate([
-            'registration_number' => 'required|string',
+            'nomor_pendaftaran' => 'required|string',
         ]);
 
-        $regNumber = $request->registration_number;
+        $nomorPendaftaran = $request->nomor_pendaftaran;
 
-        // Extract ID from registration number if it follows a pattern like REG-000015
-        $id = null;
-        if (preg_match('/REG-(\d+)/', $regNumber, $matches)) {
-            $id = (int) $matches[1];
-        }
-
-        // Find the calon santri by ID instead of registration_number
-        $calonSantri = CalonSantri::where('id', $id)->first();
+        // Find the calon santri directly by nomor_pendaftaran
+        $calonSantri = CalonSantri::where('nomor_pendaftaran', $nomorPendaftaran)->first();
 
         if (!$calonSantri) {
             return response()->json(['error' => 'Nomor pendaftaran tidak ditemukan.'], 404);
         }
-
-        // Format the registration number for display
-        $formattedRegNumber = 'REG-' . str_pad($calonSantri->id, 6, '0', STR_PAD_LEFT);
 
         // Get payment history if applicable
         $paymentHistory = [];
@@ -453,7 +487,7 @@ class PendaftaranController extends Controller
 
         return response()->json([
             'id' => $calonSantri->id,
-            'registration_number' => $formattedRegNumber,
+            'nomor_pendaftaran' => $calonSantri->nomor_pendaftaran,
             'nama' => $calonSantri->nama,
             'status' => $calonSantri->status,
             'payment_type' => $calonSantri->payment_type,
@@ -644,5 +678,22 @@ class PendaftaranController extends Controller
 
         return redirect()->route('pendaftaran.viewInstallments', $installment->calon_santri_id)
             ->with('success', 'Pembayaran cicilan berhasil diverifikasi.');
+    }
+    public function updateSession(Request $request)
+    {
+        if ($request->has('current_step')) {
+            Session::put('current_step', $request->current_step);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function resetPendaftaran()
+    {
+        // Clear all session data related to registration
+        Session::forget('calon_santri_id');
+        Session::forget('current_step');
+        // Redirect to the registration form
+        return redirect()->route('pendaftaran.halamandepan')->with('success', 'Pendaftaran baru telah dimulai.');
     }
 }
